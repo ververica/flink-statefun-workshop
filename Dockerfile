@@ -17,9 +17,11 @@ FROM statefun
 RUN mkdir -p /opt/statefun/modules/statefun-workshop-protocol
 RUN mkdir -p /opt/statefun/modules/statefun-workshop-io
 RUN mkdir -p /opt/statefun/modules/statefun-workshop-functions
+RUN mkdir -p /opt/statefun/modules/model
 
 ADD flink-conf.yaml $FLINK_HOME/conf/flink-conf.yaml
 
 COPY statefun-workshop-protocol/target/statefun-workshop-protocol*jar /opt/statefun/modules/statefun-workshop-protocol/
 COPY statefun-workshop-io/target/statefun-workshop-io*jar /opt/statefun/modules/statefun-workshop-io/
 COPY statefun-workshop-functions/target/statefun-workshop-functions*jar /opt/statefun/modules/statefun-workshop-functions/
+COPY module.yaml /opt/statefun/modules/model/module.yaml

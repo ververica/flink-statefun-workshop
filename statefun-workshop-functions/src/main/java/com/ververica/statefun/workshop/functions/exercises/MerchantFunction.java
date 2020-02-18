@@ -16,10 +16,13 @@
 
 package com.ververica.statefun.workshop.functions.exercises;
 
-import com.ververica.statefun.workshop.messages.MerchantScore;
-import com.ververica.statefun.workshop.messages.QueryMerchantScore;
+import com.ververica.statefun.workshop.generated.MerchantMetadata;
+import com.ververica.statefun.workshop.generated.MerchantScore;
+import com.ververica.statefun.workshop.generated.QueryMerchantScore;
 import com.ververica.statefun.workshop.utils.MerchantScoreService;
+import org.apache.flink.statefun.sdk.Address;
 import org.apache.flink.statefun.sdk.Context;
+import org.apache.flink.statefun.sdk.FunctionType;
 import org.apache.flink.statefun.sdk.StatefulFunction;
 
 /**
@@ -42,4 +45,45 @@ public class MerchantFunction implements StatefulFunction {
 
     @Override
     public void invoke(Context context, Object input) {}
+
+    /**
+     * A utility for building a {@link MerchantScore} when given a valid score.
+     */
+    private static MerchantScore score(int value) {
+        return MerchantScore.newBuilder()
+                .setScore(value)
+                .setError(false)
+                .build();
+    }
+
+    /**
+     * A utility for building a {@link MerchantScore} when no valid score
+     * is retrieved.
+     */
+    private static MerchantScore error() {
+        return MerchantScore.newBuilder().setError(true).build();
+    }
+
+    /**
+     * A utility for creating a new {@link MerchantMetadata} object.
+     */
+    private static MerchantMetadata newMetadata(Address address, int attempts) {
+        return MerchantMetadata.newBuilder()
+                .setRemainingAttempts(attempts)
+                .setAddress(MerchantMetadata.Address.newBuilder()
+                        .setId(address.id())
+                        .setFunctionType(MerchantMetadata.FunctionType.newBuilder()
+                                .setNamespace(address.type().namespace())
+                                .setName(address.type().name())))
+                .build();
+    }
+
+    /**
+     * A utility to get the caller {@link Address} from the metadata.
+     */
+    private static Address getStatefunAddress(MerchantMetadata metadata) {
+        MerchantMetadata.FunctionType internal = metadata.getAddress().getFunctionType();
+        FunctionType type = new FunctionType(internal.getNamespace(), internal.getName());
+        return new Address(type, metadata.getAddress().getId());
+    }
 }

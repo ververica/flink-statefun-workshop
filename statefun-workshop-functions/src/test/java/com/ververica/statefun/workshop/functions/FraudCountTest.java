@@ -22,8 +22,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 import com.ververica.statefun.workshop.functions.exercises.FraudCount;
 import com.ververica.statefun.workshop.generated.ConfirmFraud;
-import com.ververica.statefun.workshop.messages.QueryFraud;
-import com.ververica.statefun.workshop.messages.ReportedFraud;
+import com.ververica.statefun.workshop.generated.QueryFraud;
+import com.ververica.statefun.workshop.generated.ReportedFraud;
 import java.time.Duration;
 import org.apache.flink.statefun.sdk.Address;
 import org.apache.flink.statefun.sdk.FunctionType;
@@ -48,8 +48,8 @@ public class FraudCountTest {
 
         Assert.assertThat(
                 "When querying fraud, the function should return the current count",
-                harness.invoke(SENDER, new QueryFraud()),
-                sent(messagesTo(SENDER, equalTo(new ReportedFraud(1)))));
+                harness.invoke(SENDER, QueryFraud.getDefaultInstance()),
+                sent(messagesTo(SENDER, equalTo(ReportedFraud.newBuilder().setCount(1).build()))));
     }
 
     @Test
@@ -64,8 +64,8 @@ public class FraudCountTest {
 
         Assert.assertThat(
                 "When querying fraud, the function should return the current count",
-                harness.invoke(SENDER, new QueryFraud()),
-                sent(messagesTo(SENDER, equalTo(new ReportedFraud(1)))));
+                harness.invoke(SENDER, QueryFraud.getDefaultInstance()),
+                sent(messagesTo(SENDER, equalTo(ReportedFraud.newBuilder().setCount(1).build()))));
 
         Assert.assertThat(
                 "In 15 days the count should not change the function should not respond",
@@ -74,8 +74,8 @@ public class FraudCountTest {
 
         Assert.assertThat(
                 "In 15 days the count should not change the function should not respond",
-                harness.invoke(SENDER, new QueryFraud()),
-                sent(messagesTo(SENDER, equalTo(new ReportedFraud(1)))));
+                harness.invoke(SENDER, QueryFraud.getDefaultInstance()),
+                sent(messagesTo(SENDER, equalTo(ReportedFraud.newBuilder().setCount(1).build()))));
 
         Assert.assertThat(
                 "When reporting fraud, the function should not respond",
@@ -84,8 +84,8 @@ public class FraudCountTest {
 
         Assert.assertThat(
                 "When querying fraud, the function should return the current count",
-                harness.invoke(SENDER, new QueryFraud()),
-                sent(messagesTo(SENDER, equalTo(new ReportedFraud(2)))));
+                harness.invoke(SENDER, QueryFraud.getDefaultInstance()),
+                sent(messagesTo(SENDER, equalTo(ReportedFraud.newBuilder().setCount(2).build()))));
 
         Assert.assertThat(
                 "After 30 days the count should decrement, but this won't return anything",
@@ -94,7 +94,7 @@ public class FraudCountTest {
 
         Assert.assertThat(
                 "When querying fraud, the function should return the current count",
-                harness.invoke(SENDER, new QueryFraud()),
-                sent(messagesTo(SENDER, equalTo(new ReportedFraud(1)))));
+                harness.invoke(SENDER, QueryFraud.getDefaultInstance()),
+                sent(messagesTo(SENDER, equalTo(ReportedFraud.newBuilder().setCount(1).build()))));
     }
 }

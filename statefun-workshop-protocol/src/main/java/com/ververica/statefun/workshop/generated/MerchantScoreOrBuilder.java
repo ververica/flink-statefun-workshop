@@ -3,12 +3,17 @@
 
 package com.ververica.statefun.workshop.generated;
 
-public interface FraudScoreOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:FraudScore)
+public interface MerchantScoreOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:MerchantScore)
     com.google.protobuf.MessageOrBuilder {
 
   /**
    * <code>int32 score = 1;</code>
    */
   int getScore();
+
+  /**
+   * <code>bool error = 2;</code>
+   */
+  boolean getError();
 }

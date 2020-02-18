@@ -6,5 +6,7 @@ if ! [ -x "$(command -v protoc)" ]; then
 fi
 
 protoc \
+    --proto_path=statefun-workshop-protocol/src/main/protobuf/ \
+	--python_out=statefun-workshop-python/ \
 	--java_out=statefun-workshop-protocol/src/main/java/ \
-	statefun-workshop-protocol/src/main/protobuf/entities.proto
+	entities.proto

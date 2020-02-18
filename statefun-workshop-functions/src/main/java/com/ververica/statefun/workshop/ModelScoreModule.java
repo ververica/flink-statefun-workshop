@@ -20,7 +20,6 @@ import static com.ververica.statefun.workshop.identifiers.*;
 import static com.ververica.statefun.workshop.io.identifiers.CONFIRM_FRAUD;
 import static com.ververica.statefun.workshop.io.identifiers.TRANSACTIONS;
 
-import com.ververica.statefun.workshop.functions.PythonModelScorer;
 import com.ververica.statefun.workshop.functions.solutions.FraudCount;
 import com.ververica.statefun.workshop.functions.solutions.TransactionManager;
 import com.ververica.statefun.workshop.provider.MerchantProvider;
@@ -39,6 +38,5 @@ public class ModelScoreModule implements StatefulFunctionModule {
         binder.bindFunctionProvider(MANAGER_FN, ignore -> new TransactionManager());
         binder.bindFunctionProvider(FRAUD_FN, ignore -> new FraudCount());
         binder.bindFunctionProvider(MERCHANT_FN, new MerchantProvider());
-        binder.bindFunctionProvider(MODEL_FN, ignore -> new PythonModelScorer());
     }
 }

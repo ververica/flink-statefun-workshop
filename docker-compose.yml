@@ -14,6 +14,11 @@
 
 version: "2.1"
 services:
+  python_model:
+    #build: statefun-workshop-python
+    image: statefun-workshop-python:latest
+    ports:
+    - "8000:8000"
   master:
     build:
       context: .
@@ -22,7 +27,7 @@ services:
     expose:
     - "6123"
     ports:
-    - "8000:8000"
+    - "8001:8001"
     environment:
     - ROLE=master
     - MASTER_HOST=master
@@ -34,8 +39,10 @@ services:
     expose:
     - "6121"
     - "6122"
+    - "6123"
     depends_on:
     - master
+    - python_model
     links:
     - "master:master"
     environment:
