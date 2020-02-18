@@ -3,12 +3,12 @@
 
 package com.ververica.statefun.workshop.generated;
 
-public interface FraudScoreOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:FraudScore)
+public interface ReportedFraudOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:ReportedFraud)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 score = 1;</code>
+   * <code>int32 count = 1;</code>
    */
-  int getScore();
+  int getCount();
 }

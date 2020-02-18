@@ -21,8 +21,8 @@ import static org.apache.flink.statefun.testutils.matchers.StatefulFunctionMatch
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.ververica.statefun.workshop.functions.exercises.MerchantFunction;
-import com.ververica.statefun.workshop.messages.MerchantScore;
-import com.ververica.statefun.workshop.messages.QueryMerchantScore;
+import com.ververica.statefun.workshop.generated.MerchantScore;
+import com.ververica.statefun.workshop.generated.QueryMerchantScore;
 import com.ververica.statefun.workshop.utils.MerchantScoreService;
 import org.apache.flink.statefun.sdk.Address;
 import org.apache.flink.statefun.sdk.FunctionType;
@@ -45,8 +45,8 @@ public class MerchantFunctionTest {
         FunctionTestHarness harness = FunctionTestHarness.test(new TestProvider(), MERCHANT_FN, SELF_ID);
 
         Assert.assertThat(
-                harness.invoke(CALLER, new QueryMerchantScore()),
-                sent(messagesTo(CALLER, equalTo(MerchantScore.score(1)))));
+                harness.invoke(CALLER, QueryMerchantScore.getDefaultInstance()),
+                sent(messagesTo(CALLER, equalTo(MerchantScore.newBuilder().setScore(1).build()))));
     }
 
     @Test
@@ -54,8 +54,8 @@ public class MerchantFunctionTest {
          FunctionTestHarness harness = FunctionTestHarness.test(new TestProviderWithSingleFailure(), MERCHANT_FN, SELF_ID);
 
         Assert.assertThat(
-                harness.invoke(CALLER, new QueryMerchantScore()),
-                sent(messagesTo(CALLER, equalTo(MerchantScore.score(1)))));
+                harness.invoke(CALLER, QueryMerchantScore.getDefaultInstance()),
+                sent(messagesTo(CALLER, equalTo(MerchantScore.newBuilder().setScore(1).build()))));
     }
 
     @Test
@@ -63,8 +63,8 @@ public class MerchantFunctionTest {
         FunctionTestHarness harness = FunctionTestHarness.test(new TestProviderWithMultipleFailures(), MERCHANT_FN, SELF_ID);
 
         Assert.assertThat(
-                harness.invoke(CALLER, new QueryMerchantScore()),
-                sent(messagesTo(CALLER, equalTo(MerchantScore.error()))));
+                harness.invoke(CALLER, QueryMerchantScore.getDefaultInstance()),
+                sent(messagesTo(CALLER, equalTo(MerchantScore.newBuilder().setError(true).build()))));
     }
 
     private static class TestProvider implements StatefulFunctionProvider {

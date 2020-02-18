@@ -22,15 +22,16 @@ import static org.apache.flink.statefun.testutils.matchers.StatefulFunctionMatch
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 
+import com.google.protobuf.Any;
 import com.google.protobuf.Timestamp;
 import com.ververica.statefun.workshop.functions.exercises.TransactionManager;
 import com.ververica.statefun.workshop.generated.FeatureVector;
 import com.ververica.statefun.workshop.generated.FraudScore;
+import com.ververica.statefun.workshop.generated.QueryFraud;
 import com.ververica.statefun.workshop.generated.Transaction;
-import com.ververica.statefun.workshop.messages.MerchantScore;
-import com.ververica.statefun.workshop.messages.QueryFraud;
-import com.ververica.statefun.workshop.messages.QueryMerchantScore;
-import com.ververica.statefun.workshop.messages.ReportedFraud;
+import com.ververica.statefun.workshop.generated.MerchantScore;
+import com.ververica.statefun.workshop.generated.QueryMerchantScore;
+import com.ververica.statefun.workshop.generated.ReportedFraud;
 import org.apache.flink.statefun.sdk.Address;
 import org.apache.flink.statefun.testutils.function.FunctionTestHarness;
 import org.junit.Assert;
@@ -58,8 +59,8 @@ public class TransactionManagerTest {
         Assert.assertThat(
             harness.invoke(TRANSACTION),
             sent(
-                    messagesTo(new Address(FRAUD_FN, ACCOUNT), equalTo(new QueryFraud())),
-                    messagesTo(new Address(MERCHANT_FN, MERCHANT), equalTo(new QueryMerchantScore()))));
+                    messagesTo(new Address(FRAUD_FN, ACCOUNT), equalTo(QueryFraud.getDefaultInstance())),
+                    messagesTo(new Address(MERCHANT_FN, MERCHANT), equalTo(QueryMerchantScore.getDefaultInstance()))));
     }
 
     @Test
@@ -68,14 +69,14 @@ public class TransactionManagerTest {
 
         harness.invoke(TRANSACTION);
 
-        Assert.assertThat(harness.invoke(new ReportedFraud(1)), sentNothing());
+        Assert.assertThat(harness.invoke(ReportedFraud.newBuilder().setCount(1).build()), sentNothing());
 
         Assert.assertThat(
-            harness.invoke(MerchantScore.score(1)),
+            harness.invoke(MerchantScore.newBuilder().setScore(1).build()),
             sent(
                 messagesTo(
                     new Address(MODEL_FN, ACCOUNT),
-                    equalTo(FeatureVector.newBuilder().setFraudCount(1).setMerchantScore(1).build()))));
+                    equalTo(Any.pack(FeatureVector.newBuilder().setFraudCount(1).setMerchantScore(1).build())))));
     }
 
     @Test
@@ -84,14 +85,14 @@ public class TransactionManagerTest {
 
         harness.invoke(TRANSACTION);
 
-        Assert.assertThat(harness.invoke(MerchantScore.score(1)), sentNothing());
+        Assert.assertThat(harness.invoke(MerchantScore.newBuilder().setScore(1).build()), sentNothing());
 
         Assert.assertThat(
-            harness.invoke(new ReportedFraud(1)),
+            harness.invoke(ReportedFraud.newBuilder().setCount(1).build()),
             sent(
                 messagesTo(
                     new Address(MODEL_FN, ACCOUNT),
-                    equalTo(FeatureVector.newBuilder().setFraudCount(1).setMerchantScore(1).build()))));
+                    equalTo(Any.pack(FeatureVector.newBuilder().setFraudCount(1).setMerchantScore(1).build())))));
     }
 
     @Test
@@ -99,7 +100,7 @@ public class TransactionManagerTest {
         FunctionTestHarness harness = FunctionTestHarness.test(ignore -> new TransactionManager(), MANAGER_FN, "id");
         harness.invoke(TRANSACTION);
 
-        Assert.assertThat(harness.invoke(FraudScore.newBuilder().setScore(81).build()), sentNothing());
+        Assert.assertThat(harness.invoke(Any.pack(FraudScore.newBuilder().setScore(81).build())), sentNothing());
 
         Assert.assertThat(harness.getEgress(ALERT), contains(equalTo(TRANSACTION)));
     }
@@ -109,7 +110,7 @@ public class TransactionManagerTest {
         FunctionTestHarness harness = FunctionTestHarness.test(ignore -> new TransactionManager(), MANAGER_FN, "id");
         harness.invoke(TRANSACTION);
 
-        Assert.assertThat(harness.invoke(FraudScore.newBuilder().setScore(81).build()), sentNothing());
+        Assert.assertThat(harness.invoke(Any.pack(FraudScore.newBuilder().setScore(81).build())), sentNothing());
 
         Assert.assertThat(harness.getEgress(ALERT), contains(equalTo(TRANSACTION)));
     }

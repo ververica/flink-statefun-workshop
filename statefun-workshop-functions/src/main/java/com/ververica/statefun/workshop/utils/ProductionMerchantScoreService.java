@@ -32,7 +32,7 @@ public class ProductionMerchantScoreService implements MerchantScoreService {
 
     @Override
     public CompletableFuture<Integer> query(String merchantId) {
-         CompletableFuture<Integer> result = new CompletableFuture<>();
+        CompletableFuture<Integer> result = new CompletableFuture<>();
 
         final long randomCompletionDelay = ThreadLocalRandom.current().nextLong(5_000);
         executor.schedule(completeRandomly(merchantId, result), randomCompletionDelay, TimeUnit.MILLISECONDS);

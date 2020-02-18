@@ -16,13 +16,14 @@
 
 package com.ververica.statefun.workshop.functions.solutions;
 
-import com.ververica.statefun.workshop.messages.MerchantMetadata;
-import com.ververica.statefun.workshop.messages.MerchantScore;
-import com.ververica.statefun.workshop.messages.QueryMerchantScore;
+import com.ververica.statefun.workshop.generated.MerchantMetadata;
+import com.ververica.statefun.workshop.generated.MerchantScore;
+import com.ververica.statefun.workshop.generated.QueryMerchantScore;
 import com.ververica.statefun.workshop.utils.MerchantScoreService;
 import org.apache.flink.statefun.sdk.Address;
 import org.apache.flink.statefun.sdk.AsyncOperationResult;
 import org.apache.flink.statefun.sdk.Context;
+import org.apache.flink.statefun.sdk.FunctionType;
 import org.apache.flink.statefun.sdk.StatefulFunction;
 
 /**
@@ -40,8 +41,8 @@ public class MerchantFunction implements StatefulFunction {
     private final MerchantScoreService client;
 
     public MerchantFunction(MerchantScoreService client) {
-    this.client = client;
-  }
+        this.client = client;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -56,17 +57,16 @@ public class MerchantFunction implements StatefulFunction {
 
             MerchantMetadata metadata = result.metadata();
             if (result.unknown()) {
-                queryService(context, metadata.getAddress(), metadata.getRemainingAttempts());
+                queryService(context, getStatefunAddress(metadata), metadata.getRemainingAttempts());
             } else if (result.failure()) {
                 if (metadata.getRemainingAttempts() == 0) {
-                    context.send(metadata.getAddress(), MerchantScore.error());
+                    context.send(getStatefunAddress(metadata), error());
                 } else {
-                    queryService(context, metadata.getAddress(), metadata.getRemainingAttempts() - 1);
+                    queryService(context, getStatefunAddress(metadata), metadata.getRemainingAttempts() - 1);
                 }
             } else {
 
-                MerchantScore score = MerchantScore.score(result.value());
-                context.send(metadata.getAddress(), score);
+                context.send(getStatefunAddress(metadata),  score(result.value()));
             }
         }
     }
@@ -79,7 +79,48 @@ public class MerchantFunction implements StatefulFunction {
      * @param attempts The number of remaining attempts.
      */
     private void queryService(Context context, Address address, int attempts) {
-        MerchantMetadata metadata = new MerchantMetadata(address, attempts);
+        MerchantMetadata metadata = newMetadata(address, attempts);
         context.registerAsyncOperation(metadata, client.query(context.self().id()));
+    }
+
+    /**
+     * A utility for building a {@link MerchantScore} when given a valid score.
+     */
+    private static MerchantScore score(int value) {
+        return MerchantScore.newBuilder()
+                .setScore(value)
+                .setError(false)
+                .build();
+    }
+
+    /**
+     * A utility for building a {@link MerchantScore} when no valid score
+     * is retrieved.
+     */
+    private static MerchantScore error() {
+        return MerchantScore.newBuilder().setError(true).build();
+    }
+
+    /**
+     * A utility for creating a new {@link MerchantMetadata} object.
+     */
+    private static MerchantMetadata newMetadata(Address address, int attempts) {
+        return MerchantMetadata.newBuilder()
+                .setRemainingAttempts(attempts)
+                .setAddress(MerchantMetadata.Address.newBuilder()
+                    .setId(address.id())
+                    .setFunctionType(MerchantMetadata.FunctionType.newBuilder()
+                        .setNamespace(address.type().namespace())
+                        .setName(address.type().name())))
+                .build();
+    }
+
+    /**
+     * A utility to get the caller {@link Address} from the metadata.
+     */
+    private static Address getStatefunAddress(MerchantMetadata metadata) {
+        MerchantMetadata.FunctionType internal = metadata.getAddress().getFunctionType();
+        FunctionType type = new FunctionType(internal.getNamespace(), internal.getName());
+        return new Address(type, metadata.getAddress().getId());
     }
 }

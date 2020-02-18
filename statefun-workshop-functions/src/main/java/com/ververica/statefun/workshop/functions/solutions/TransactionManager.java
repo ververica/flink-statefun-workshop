@@ -19,13 +19,15 @@ package com.ververica.statefun.workshop.functions.solutions;
 import static com.ververica.statefun.workshop.identifiers.*;
 import static com.ververica.statefun.workshop.io.identifiers.ALERT;
 
+import com.google.protobuf.Any;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.ververica.statefun.workshop.generated.FeatureVector;
 import com.ververica.statefun.workshop.generated.FraudScore;
+import com.ververica.statefun.workshop.generated.QueryFraud;
 import com.ververica.statefun.workshop.generated.Transaction;
-import com.ververica.statefun.workshop.messages.MerchantScore;
-import com.ververica.statefun.workshop.messages.QueryFraud;
-import com.ververica.statefun.workshop.messages.QueryMerchantScore;
-import com.ververica.statefun.workshop.messages.ReportedFraud;
+import com.ververica.statefun.workshop.generated.MerchantScore;
+import com.ververica.statefun.workshop.generated.QueryMerchantScore;
+import com.ververica.statefun.workshop.generated.ReportedFraud;
 import org.apache.flink.statefun.sdk.Context;
 import org.apache.flink.statefun.sdk.StatefulFunction;
 import org.apache.flink.statefun.sdk.annotations.Persisted;
@@ -51,10 +53,10 @@ public class TransactionManager implements StatefulFunction {
             transactionState.set(transaction);
 
             String account = transaction.getAccount();
-            context.send(FRAUD_FN, account, new QueryFraud());
+            context.send(FRAUD_FN, account, QueryFraud.getDefaultInstance());
 
             String merchant = transaction.getMerchant();
-            context.send(MERCHANT_FN, merchant, new QueryMerchantScore());
+            context.send(MERCHANT_FN, merchant, QueryMerchantScore.getDefaultInstance());
         }
 
         if (input instanceof ReportedFraud) {
@@ -77,8 +79,13 @@ public class TransactionManager implements StatefulFunction {
             }
         }
 
-        if (input instanceof FraudScore) {
-            FraudScore fraudScore = (FraudScore) input;
+        if (input instanceof Any) {
+            final FraudScore fraudScore;
+            try {
+                fraudScore = (((Any) input).unpack(FraudScore.class));
+            } catch (InvalidProtocolBufferException e) {
+                throw new RuntimeException("Unexpected type", e);
+            }
             if (fraudScore.getScore() > THRESHOLD) {
                 context.send(ALERT, transactionState.get());
             }
@@ -92,10 +99,11 @@ public class TransactionManager implements StatefulFunction {
     private void score(Context context, MerchantScore merchant, Integer count) {
         FeatureVector.Builder vector = FeatureVector.newBuilder().setFraudCount(count);
 
-        if (merchant.isSuccess()) {
+        if (!merchant.getError()) {
             vector.setMerchantScore(merchant.getScore());
         }
 
-        context.send(MODEL_FN, transactionState.get().getAccount(), vector.build());
+        Any message = Any.pack(vector.build());
+        context.send(MODEL_FN, transactionState.get().getAccount(), message);
     }
 }

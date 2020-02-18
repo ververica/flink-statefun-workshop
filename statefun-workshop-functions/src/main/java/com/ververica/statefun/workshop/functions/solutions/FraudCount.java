@@ -17,9 +17,9 @@
 package com.ververica.statefun.workshop.functions.solutions;
 
 import com.ververica.statefun.workshop.generated.ConfirmFraud;
-import com.ververica.statefun.workshop.messages.ExpireFraud;
-import com.ververica.statefun.workshop.messages.QueryFraud;
-import com.ververica.statefun.workshop.messages.ReportedFraud;
+import com.ververica.statefun.workshop.generated.QueryFraud;
+import com.ververica.statefun.workshop.generated.ExpireFraud;
+import com.ververica.statefun.workshop.generated.ReportedFraud;
 import java.time.Duration;
 import org.apache.flink.statefun.sdk.Context;
 import org.apache.flink.statefun.sdk.StatefulFunction;
@@ -51,7 +51,7 @@ public class FraudCount implements StatefulFunction {
             int current = count.getOrDefault(0);
             count.set(current + 1);
 
-            context.sendAfter(Duration.ofDays(30), context.self(), new ExpireFraud());
+            context.sendAfter(Duration.ofDays(30), context.self(), ExpireFraud.getDefaultInstance());
         }
 
         if (input instanceof ExpireFraud) {
@@ -65,7 +65,7 @@ public class FraudCount implements StatefulFunction {
 
         if (input instanceof QueryFraud) {
             int current = count.getOrDefault(0);
-            ReportedFraud response = new ReportedFraud(current);
+            ReportedFraud response = ReportedFraud.newBuilder().setCount(current).build();
             context.reply(response);
         }
     }

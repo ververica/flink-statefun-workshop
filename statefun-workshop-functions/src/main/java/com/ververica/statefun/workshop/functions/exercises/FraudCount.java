@@ -16,9 +16,9 @@
 
 package com.ververica.statefun.workshop.functions.exercises;
 
-import com.ververica.statefun.workshop.messages.ExpireFraud;
-import com.ververica.statefun.workshop.messages.QueryFraud;
-import com.ververica.statefun.workshop.messages.ReportedFraud;
+import com.ververica.statefun.workshop.generated.ExpireFraud;
+import com.ververica.statefun.workshop.generated.ReportedFraud;
+import com.ververica.statefun.workshop.generated.QueryFraud;
 import org.apache.flink.statefun.sdk.Context;
 import org.apache.flink.statefun.sdk.StatefulFunction;
 

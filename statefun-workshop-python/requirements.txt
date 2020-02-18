@@ -1,0 +1,4 @@
+apache-flink-statefun
+flask
+gunicorn==20.0.4
+numpy==1.15.3

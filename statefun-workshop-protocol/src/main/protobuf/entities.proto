@@ -17,11 +17,10 @@
  */
 syntax = "proto3";
 
-package org.apache.flink.statefun.examples.kafka;
-
 import "google/protobuf/timestamp.proto";
 
 option java_package = "com.ververica.statefun.workshop.generated";
+
 option java_multiple_files = true;
 
 message ConfirmFraud {
@@ -36,10 +35,67 @@ message Transaction {
 }
 
 message FeatureVector {
-    int32 fraudCount    = 1;
-    int32 merchantScore = 2;
+    int32 fraud_count    = 1;
+    int32 merchant_score = 2;
 }
 
 message FraudScore {
     int32 score = 1;
+}
+
+// This message is sent from a FraudCount
+// instance when reporting the current count
+message ReportedFraud {
+    int32 count = 1;
+}
+
+// This message is sent to a FraudCount instance
+// when 30 days have elapsed and its internal
+// count should be decremented by 1.
+message ExpireFraud {
+
+}
+
+// This message is sent to a FraudCount instance
+// when another entity wants to query the
+// current count for a particular account.
+message QueryFraud {
+
+}
+
+
+// This message is sent from a MerchantFunction
+// instance when reporting the trustworthiness
+// of a merchant.
+message MerchantScore {
+    int32 score = 1;
+    bool error = 2;
+}
+
+
+// This message is sent to an instance of a MerchantFunction
+// to query the external service for the trustworthiness score
+// of a merchant.
+message QueryMerchantScore {
+
+}
+
+
+// The metadata stored along with each async request in the {@link MerchantFunction}.
+// It tracks the {@link Address} where the final result should be sent along with the number of
+// remaining attempts in case of failure.
+
+message MerchantMetadata {
+    message FunctionType {
+        string namespace = 1;
+        string name = 2;
+    }
+
+    message Address {
+        string id = 1;
+        FunctionType function_type = 2;
+    }
+
+    Address address = 1;
+    int32 remaining_attempts = 2;
 }

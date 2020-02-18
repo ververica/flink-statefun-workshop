@@ -4,19 +4,24 @@
 package com.ververica.statefun.workshop.generated;
 
 /**
- * Protobuf type {@code ConfirmFraud}
+ * <pre>
+ * This message is sent from a MerchantFunction
+ * instance when reporting the trustworthiness
+ * of a merchant.
+ * </pre>
+ *
+ * Protobuf type {@code MerchantScore}
  */
-public  final class ConfirmFraud extends
+public  final class MerchantScore extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:ConfirmFraud)
-    ConfirmFraudOrBuilder {
+    // @@protoc_insertion_point(message_implements:MerchantScore)
+    MerchantScoreOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ConfirmFraud.newBuilder() to construct.
-  private ConfirmFraud(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use MerchantScore.newBuilder() to construct.
+  private MerchantScore(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ConfirmFraud() {
-    account_ = "";
+  private MerchantScore() {
   }
 
   @java.lang.Override
@@ -24,7 +29,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private ConfirmFraud(
+  private MerchantScore(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -43,10 +48,14 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 8: {
 
-            account_ = s;
+            score_ = input.readInt32();
+            break;
+          }
+          case 16: {
+
+            error_ = input.readBool();
             break;
           }
           default: {
@@ -70,49 +79,33 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.ververica.statefun.workshop.generated.Entities.internal_static_ConfirmFraud_descriptor;
+    return com.ververica.statefun.workshop.generated.Entities.internal_static_MerchantScore_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.ververica.statefun.workshop.generated.Entities.internal_static_ConfirmFraud_fieldAccessorTable
+    return com.ververica.statefun.workshop.generated.Entities.internal_static_MerchantScore_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.ververica.statefun.workshop.generated.ConfirmFraud.class, com.ververica.statefun.workshop.generated.ConfirmFraud.Builder.class);
+            com.ververica.statefun.workshop.generated.MerchantScore.class, com.ververica.statefun.workshop.generated.MerchantScore.Builder.class);
   }
 
-  public static final int ACCOUNT_FIELD_NUMBER = 1;
-  private volatile java.lang.Object account_;
+  public static final int SCORE_FIELD_NUMBER = 1;
+  private int score_;
   /**
-   * <code>string account = 1;</code>
+   * <code>int32 score = 1;</code>
    */
-  public java.lang.String getAccount() {
-    java.lang.Object ref = account_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      account_ = s;
-      return s;
-    }
+  public int getScore() {
+    return score_;
   }
+
+  public static final int ERROR_FIELD_NUMBER = 2;
+  private boolean error_;
   /**
-   * <code>string account = 1;</code>
+   * <code>bool error = 2;</code>
    */
-  public com.google.protobuf.ByteString
-      getAccountBytes() {
-    java.lang.Object ref = account_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      account_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public boolean getError() {
+    return error_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -129,8 +122,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getAccountBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, account_);
+    if (score_ != 0) {
+      output.writeInt32(1, score_);
+    }
+    if (error_ != false) {
+      output.writeBool(2, error_);
     }
     unknownFields.writeTo(output);
   }
@@ -141,8 +137,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getAccountBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, account_);
+    if (score_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(1, score_);
+    }
+    if (error_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(2, error_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -154,13 +155,15 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.ververica.statefun.workshop.generated.ConfirmFraud)) {
+    if (!(obj instanceof com.ververica.statefun.workshop.generated.MerchantScore)) {
       return super.equals(obj);
     }
-    com.ververica.statefun.workshop.generated.ConfirmFraud other = (com.ververica.statefun.workshop.generated.ConfirmFraud) obj;
+    com.ververica.statefun.workshop.generated.MerchantScore other = (com.ververica.statefun.workshop.generated.MerchantScore) obj;
 
-    if (!getAccount()
-        .equals(other.getAccount())) return false;
+    if (getScore()
+        != other.getScore()) return false;
+    if (getError()
+        != other.getError()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -172,76 +175,79 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + ACCOUNT_FIELD_NUMBER;
-    hash = (53 * hash) + getAccount().hashCode();
+    hash = (37 * hash) + SCORE_FIELD_NUMBER;
+    hash = (53 * hash) + getScore();
+    hash = (37 * hash) + ERROR_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getError());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(byte[] data)
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(java.io.InputStream input)
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseDelimitedFrom(java.io.InputStream input)
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseDelimitedFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud parseFrom(
+  public static com.ververica.statefun.workshop.generated.MerchantScore parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -254,7 +260,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.ververica.statefun.workshop.generated.ConfirmFraud prototype) {
+  public static Builder newBuilder(com.ververica.statefun.workshop.generated.MerchantScore prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -270,26 +276,32 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code ConfirmFraud}
+   * <pre>
+   * This message is sent from a MerchantFunction
+   * instance when reporting the trustworthiness
+   * of a merchant.
+   * </pre>
+   *
+   * Protobuf type {@code MerchantScore}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:ConfirmFraud)
-      com.ververica.statefun.workshop.generated.ConfirmFraudOrBuilder {
+      // @@protoc_insertion_point(builder_implements:MerchantScore)
+      com.ververica.statefun.workshop.generated.MerchantScoreOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.ververica.statefun.workshop.generated.Entities.internal_static_ConfirmFraud_descriptor;
+      return com.ververica.statefun.workshop.generated.Entities.internal_static_MerchantScore_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.ververica.statefun.workshop.generated.Entities.internal_static_ConfirmFraud_fieldAccessorTable
+      return com.ververica.statefun.workshop.generated.Entities.internal_static_MerchantScore_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.ververica.statefun.workshop.generated.ConfirmFraud.class, com.ververica.statefun.workshop.generated.ConfirmFraud.Builder.class);
+              com.ververica.statefun.workshop.generated.MerchantScore.class, com.ververica.statefun.workshop.generated.MerchantScore.Builder.class);
     }
 
-    // Construct using com.ververica.statefun.workshop.generated.ConfirmFraud.newBuilder()
+    // Construct using com.ververica.statefun.workshop.generated.MerchantScore.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -307,7 +319,9 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      account_ = "";
+      score_ = 0;
+
+      error_ = false;
 
       return this;
     }
@@ -315,17 +329,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.ververica.statefun.workshop.generated.Entities.internal_static_ConfirmFraud_descriptor;
+      return com.ververica.statefun.workshop.generated.Entities.internal_static_MerchantScore_descriptor;
     }
 
     @java.lang.Override
-    public com.ververica.statefun.workshop.generated.ConfirmFraud getDefaultInstanceForType() {
-      return com.ververica.statefun.workshop.generated.ConfirmFraud.getDefaultInstance();
+    public com.ververica.statefun.workshop.generated.MerchantScore getDefaultInstanceForType() {
+      return com.ververica.statefun.workshop.generated.MerchantScore.getDefaultInstance();
     }
 
     @java.lang.Override
-    public com.ververica.statefun.workshop.generated.ConfirmFraud build() {
-      com.ververica.statefun.workshop.generated.ConfirmFraud result = buildPartial();
+    public com.ververica.statefun.workshop.generated.MerchantScore build() {
+      com.ververica.statefun.workshop.generated.MerchantScore result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -333,9 +347,10 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.ververica.statefun.workshop.generated.ConfirmFraud buildPartial() {
-      com.ververica.statefun.workshop.generated.ConfirmFraud result = new com.ververica.statefun.workshop.generated.ConfirmFraud(this);
-      result.account_ = account_;
+    public com.ververica.statefun.workshop.generated.MerchantScore buildPartial() {
+      com.ververica.statefun.workshop.generated.MerchantScore result = new com.ververica.statefun.workshop.generated.MerchantScore(this);
+      result.score_ = score_;
+      result.error_ = error_;
       onBuilt();
       return result;
     }
@@ -374,19 +389,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.ververica.statefun.workshop.generated.ConfirmFraud) {
-        return mergeFrom((com.ververica.statefun.workshop.generated.ConfirmFraud)other);
+      if (other instanceof com.ververica.statefun.workshop.generated.MerchantScore) {
+        return mergeFrom((com.ververica.statefun.workshop.generated.MerchantScore)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.ververica.statefun.workshop.generated.ConfirmFraud other) {
-      if (other == com.ververica.statefun.workshop.generated.ConfirmFraud.getDefaultInstance()) return this;
-      if (!other.getAccount().isEmpty()) {
-        account_ = other.account_;
-        onChanged();
+    public Builder mergeFrom(com.ververica.statefun.workshop.generated.MerchantScore other) {
+      if (other == com.ververica.statefun.workshop.generated.MerchantScore.getDefaultInstance()) return this;
+      if (other.getScore() != 0) {
+        setScore(other.getScore());
+      }
+      if (other.getError() != false) {
+        setError(other.getError());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -403,11 +420,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.ververica.statefun.workshop.generated.ConfirmFraud parsedMessage = null;
+      com.ververica.statefun.workshop.generated.MerchantScore parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.ververica.statefun.workshop.generated.ConfirmFraud) e.getUnfinishedMessage();
+        parsedMessage = (com.ververica.statefun.workshop.generated.MerchantScore) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -417,71 +434,54 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object account_ = "";
+    private int score_ ;
     /**
-     * <code>string account = 1;</code>
+     * <code>int32 score = 1;</code>
      */
-    public java.lang.String getAccount() {
-      java.lang.Object ref = account_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        account_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    public int getScore() {
+      return score_;
     }
     /**
-     * <code>string account = 1;</code>
+     * <code>int32 score = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getAccountBytes() {
-      java.lang.Object ref = account_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        account_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string account = 1;</code>
-     */
-    public Builder setAccount(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      account_ = value;
+    public Builder setScore(int value) {
+      
+      score_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string account = 1;</code>
+     * <code>int32 score = 1;</code>
      */
-    public Builder clearAccount() {
+    public Builder clearScore() {
       
-      account_ = getDefaultInstance().getAccount();
+      score_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private boolean error_ ;
+    /**
+     * <code>bool error = 2;</code>
+     */
+    public boolean getError() {
+      return error_;
+    }
+    /**
+     * <code>bool error = 2;</code>
+     */
+    public Builder setError(boolean value) {
+      
+      error_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string account = 1;</code>
+     * <code>bool error = 2;</code>
      */
-    public Builder setAccountBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
+    public Builder clearError() {
       
-      account_ = value;
+      error_ = false;
       onChanged();
       return this;
     }
@@ -498,41 +498,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:ConfirmFraud)
+    // @@protoc_insertion_point(builder_scope:MerchantScore)
   }
 
-  // @@protoc_insertion_point(class_scope:ConfirmFraud)
-  private static final com.ververica.statefun.workshop.generated.ConfirmFraud DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:MerchantScore)
+  private static final com.ververica.statefun.workshop.generated.MerchantScore DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.ververica.statefun.workshop.generated.ConfirmFraud();
+    DEFAULT_INSTANCE = new com.ververica.statefun.workshop.generated.MerchantScore();
   }
 
-  public static com.ververica.statefun.workshop.generated.ConfirmFraud getDefaultInstance() {
+  public static com.ververica.statefun.workshop.generated.MerchantScore getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ConfirmFraud>
-      PARSER = new com.google.protobuf.AbstractParser<ConfirmFraud>() {
+  private static final com.google.protobuf.Parser<MerchantScore>
+      PARSER = new com.google.protobuf.AbstractParser<MerchantScore>() {
     @java.lang.Override
-    public ConfirmFraud parsePartialFrom(
+    public MerchantScore parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new ConfirmFraud(input, extensionRegistry);
+      return new MerchantScore(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<ConfirmFraud> parser() {
+  public static com.google.protobuf.Parser<MerchantScore> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ConfirmFraud> getParserForType() {
+  public com.google.protobuf.Parser<MerchantScore> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.ververica.statefun.workshop.generated.ConfirmFraud getDefaultInstanceForType() {
+  public com.ververica.statefun.workshop.generated.MerchantScore getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 
