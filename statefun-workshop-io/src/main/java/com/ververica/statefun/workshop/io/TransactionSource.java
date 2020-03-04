@@ -21,7 +21,9 @@ import com.ververica.statefun.workshop.generated.Transaction;
 import com.ververica.statefun.workshop.merchants.Merchants;
 
 import java.time.Instant;
+import java.util.Iterator;
 import java.util.SplittableRandom;
+
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
@@ -47,6 +49,8 @@ public class TransactionSource
 
     private transient ListState<Long> idState;
 
+    private transient Iterator<String> merchants;
+
     TransactionSource(int maxRecordsPerSecond) {
         Preconditions.checkArgument(
                 maxRecordsPerSecond == -1 || maxRecordsPerSecond > 0,
@@ -60,6 +64,8 @@ public class TransactionSource
         if (id == -1) {
             id = getRuntimeContext().getIndexOfThisSubtask();
         }
+
+        merchants = Merchants.iterator();
     }
 
     @Override
@@ -72,7 +78,7 @@ public class TransactionSource
         final Object lock = ctx.getCheckpointLock();
 
         while (running) {
-            Transaction event = randomEvent(rnd, id);
+            Transaction event = randomEvent(rnd);
 
             synchronized (lock) {
                 ctx.collect(event);
@@ -114,10 +120,10 @@ public class TransactionSource
         }
     }
 
-    private Transaction randomEvent(SplittableRandom rnd, long id) {
+    private Transaction randomEvent(SplittableRandom rnd) {
         Instant time = Instant.now();
         return Transaction.newBuilder()
-            .setMerchant(Merchants.MERCHANTS[((int) id) % Merchants.MERCHANTS.length])
+            .setMerchant(merchants.next())
             .setAccount(String.format("0x%08X", rnd.nextInt(0x100000, 0x1000000)))
             .setAmount(rnd.nextInt(100000))
             .setTimestamp(Timestamp.newBuilder()

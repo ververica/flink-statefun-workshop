@@ -17,8 +17,14 @@
 package com.ververica.statefun.workshop.merchants;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class Merchants {
+
+    private Merchants() {}
 
     private static String[] PREFIXES = {
         "active", "arc", "auto", "app", "avi", "base", "co", "con", "core", "clear", "en", "echo",
@@ -37,7 +43,7 @@ public class Merchants {
         "tilt", "ture", "type", "view", "verge", "vibe", "ware", "yard", "up"
     };
 
-    public static final String[] MERCHANTS =
+    private static final String[] MERCHANTS =
         Arrays.stream(PREFIXES)
             .flatMap(prefix -> Arrays.stream(WORD_SUFFIXES).map(suffix -> prefix + suffix))
             .map(Merchants::capitalize)
@@ -46,4 +52,17 @@ public class Merchants {
     private static String capitalize(String word) {
     return word.substring(0, 1).toUpperCase() + word.substring(1);
   }
+
+    private static Stream<String> shuffle(String[] items) {
+        List<String> list = Arrays.asList(items);
+        Collections.shuffle(list);
+        return list.stream();
+    }
+
+    public static Iterator<String> iterator() {
+        return Stream
+                .generate(() -> Merchants.MERCHANTS)
+                .flatMap(Merchants::shuffle)
+                .iterator();
+    }
 }
