@@ -33,7 +33,7 @@ public class WorkshopIOModule implements StatefulFunctionModule {
 
     private static final String TRANSACTION_RATE_KEY = "transaction-rate";
 
-    private static final String DEFAULT_TRANSACTION_RATE = "100";
+    private static final String DEFAULT_TRANSACTION_RATE = "10";
 
     @Override
     public void configure(Map<String, String> globalConfiguration, Binder binder) {
