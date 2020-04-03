@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.io;
+package com.ververica.statefun.workshop.io.local;
 
 import com.ververica.statefun.workshop.generated.ConfirmFraud;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
@@ -28,7 +28,7 @@ public class ConfirmedTransactionSource extends RichSourceFunction<ConfirmFraud>
 
     private volatile boolean running = true;
 
-    ConfirmedTransactionSource(int maxRecordsPerSecond) {
+    public ConfirmedTransactionSource(int maxRecordsPerSecond) {
         Preconditions.checkArgument(
                 maxRecordsPerSecond == -1 || maxRecordsPerSecond > 0,
                 "maxRecordsPerSecond must be positive or -1 (infinite)");

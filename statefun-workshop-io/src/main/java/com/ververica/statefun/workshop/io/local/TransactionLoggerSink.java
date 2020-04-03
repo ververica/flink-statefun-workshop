@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.io;
+package com.ververica.statefun.workshop.io.local;
 
 import com.ververica.statefun.workshop.generated.Transaction;
 import org.apache.flink.configuration.Configuration;

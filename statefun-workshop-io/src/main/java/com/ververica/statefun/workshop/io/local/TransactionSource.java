@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.io;
+package com.ververica.statefun.workshop.io.local;
 
 import com.google.protobuf.Timestamp;
 import com.ververica.statefun.workshop.generated.Transaction;
@@ -41,7 +41,7 @@ public class TransactionSource
 
     private static final long serialVersionUID = 1L;
 
-    private final int maxRecordsPerSecond;
+    private final long maxRecordsPerSecond;
 
     private volatile boolean running = true;
 
@@ -51,7 +51,7 @@ public class TransactionSource
 
     private transient Iterator<String> merchants;
 
-    TransactionSource(int maxRecordsPerSecond) {
+    public TransactionSource(long maxRecordsPerSecond) {
         Preconditions.checkArgument(
                 maxRecordsPerSecond == -1 || maxRecordsPerSecond > 0,
                 "maxRecordsPerSecond must be positive or -1 (infinite)");

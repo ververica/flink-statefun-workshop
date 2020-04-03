@@ -60,6 +60,17 @@ parallelism.default: 1
 
 rest.bind-port: 8001
 
+classloader.parent-first-patterns.additional: org.apache.flink.statefun;org.apache.kafka;com.google.protobuf
+
+jobmanager.scheduler: legacy
+
 execution.checkpointing.interval: 10s
 
-classloader.parent-first-patterns.additional: org.apache.flink.statefun;org.apache.kafka;com.google.protobuf
+# IO configurations
+
+statefun.module.global-config.io-type: local
+statefun.module.global-config.local.transaction-rate: 10s
+
+statefun.module.global-config.kafka.address: localhost:9090
+statefun.module.global-config.kafka.transaction-topic: transactions
+statefun.module.global-config.kafka.confirm-fraud-topic: confirmed

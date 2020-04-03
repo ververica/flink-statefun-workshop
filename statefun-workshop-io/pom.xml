@@ -29,11 +29,10 @@ under the License.
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.15</version>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>statefun-kafka-io</artifactId>
+            <version>${flink.statefun.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>statefun-flink-io</artifactId>

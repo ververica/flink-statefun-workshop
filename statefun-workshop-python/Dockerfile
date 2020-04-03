@@ -14,9 +14,9 @@ RUN apk --no-cache --update-cache add \
     openblas-dev
 
 # The following two lines would be removed once statefun would be published to PyPI
-COPY apache_flink_statefun-1.1_SNAPSHOT-py3-none-any.whl /app
+COPY apache_flink_statefun-2.0_SNAPSHOT-py3-none-any.whl /app
 
-RUN pip install apache_flink_statefun-1.1_SNAPSHOT-py3-none-any.whl
+RUN pip install apache_flink_statefun-2.0_SNAPSHOT-py3-none-any.whl
 
 COPY requirements.txt /app
 

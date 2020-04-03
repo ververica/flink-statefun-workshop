@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM statefun
+FROM flink-statefun:2.0-SNAPSHOT
 
 RUN mkdir -p /opt/statefun/modules/statefun-workshop-protocol
 RUN mkdir -p /opt/statefun/modules/statefun-workshop-io

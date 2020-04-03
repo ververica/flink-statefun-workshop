@@ -1,4 +1,4 @@
-package com.ververica.statefun.workshop.io;
+package com.ververica.statefun.workshop.io.local;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;

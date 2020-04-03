@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.io;
+package com.ververica.statefun.workshop.io.local;
 
 import org.apache.flink.util.Preconditions;
 

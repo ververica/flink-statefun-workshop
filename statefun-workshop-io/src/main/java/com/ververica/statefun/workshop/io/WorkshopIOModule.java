@@ -23,32 +23,40 @@ import static com.ververica.statefun.workshop.io.identifiers.TRANSACTIONS;
 import com.ververica.statefun.workshop.generated.ConfirmFraud;
 import com.ververica.statefun.workshop.generated.Transaction;
 import java.util.Map;
+
+import com.ververica.statefun.workshop.io.kafka.AlertSerializer;
+import com.ververica.statefun.workshop.io.kafka.ConfirmFraudDeserializer;
+import com.ververica.statefun.workshop.io.kafka.TransactionDeserializer;
+import com.ververica.statefun.workshop.io.local.ConfirmedTransactionSource;
+import com.ververica.statefun.workshop.io.local.TransactionLoggerSink;
+import com.ververica.statefun.workshop.io.local.TransactionSource;
 import org.apache.flink.statefun.flink.io.datastream.SinkFunctionSpec;
 import org.apache.flink.statefun.flink.io.datastream.SourceFunctionSpec;
 import org.apache.flink.statefun.sdk.io.EgressSpec;
 import org.apache.flink.statefun.sdk.io.IngressSpec;
+import org.apache.flink.statefun.sdk.kafka.KafkaEgressBuilder;
+import org.apache.flink.statefun.sdk.kafka.KafkaIngressBuilder;
+import org.apache.flink.statefun.sdk.kafka.KafkaIngressSpec;
+import org.apache.flink.statefun.sdk.kafka.KafkaIngressStartupPosition;
 import org.apache.flink.statefun.sdk.spi.StatefulFunctionModule;
 
 public class WorkshopIOModule implements StatefulFunctionModule {
 
-    private static final String TRANSACTION_RATE_KEY = "transaction-rate";
-
-    private static final String DEFAULT_TRANSACTION_RATE = "10";
-
     @Override
     public void configure(Map<String, String> globalConfiguration, Binder binder) {
-        String rateConfig = globalConfiguration.getOrDefault(TRANSACTION_RATE_KEY, DEFAULT_TRANSACTION_RATE);
+        IOConfig config = IOConfig.fromGlobalConfig(globalConfiguration);
 
-        final int rate;
-        try {
-            rate = Integer.parseInt(rateConfig);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Failed to parse transaction rate", e);
+        if (config.getIOType() == IOConfig.IOType.LOCAL) {
+            configureLocal(config.getLocalConfig(), binder);
+        } else {
+            configureKafka(config.getKafkaConfig(), binder);
         }
+    }
 
+    private void configureLocal(IOConfig.LocalConfig config, Binder binder) {
         IngressSpec<Transaction> transactions = new SourceFunctionSpec<>(
                 TRANSACTIONS,
-                new TransactionSource(rate));
+                new TransactionSource(config.getTransactionRate().getSeconds()));
 
         binder.bindIngress(transactions);
 
@@ -59,6 +67,37 @@ public class WorkshopIOModule implements StatefulFunctionModule {
         binder.bindIngress(confirmedFraud);
 
         EgressSpec<Transaction> alert = new SinkFunctionSpec<>(ALERT, new TransactionLoggerSink());
+        binder.bindEgress(alert);
+    }
+
+    private void configureKafka(IOConfig.KafkaConfig config, Binder binder) {
+        IngressSpec<Transaction> transactions = KafkaIngressBuilder
+                .forIdentifier(TRANSACTIONS)
+                .withKafkaAddress(config.getKafkaAddress())
+                .withTopic(config.getTransactionTopic())
+                .withStartupPosition(KafkaIngressStartupPosition.fromLatest())
+                .withDeserializer(TransactionDeserializer.class)
+                .build();
+
+        binder.bindIngress(transactions);
+
+        IngressSpec<ConfirmFraud> confirmedFraud = KafkaIngressBuilder
+                .forIdentifier(CONFIRM_FRAUD)
+                .withKafkaAddress(config.getKafkaAddress())
+                .withTopic(config.getConfirmFraudTopic())
+                .withStartupPosition(KafkaIngressStartupPosition.fromLatest())
+                .withDeserializer(ConfirmFraudDeserializer.class)
+                .build();
+
+        binder.bindIngress(confirmedFraud);
+
+        EgressSpec<Transaction> alert = KafkaEgressBuilder
+                .forIdentifier(ALERT)
+                .withKafkaAddress(config.getKafkaAddress())
+                .withAtLeastOnceProducerSemantics()
+                .withSerializer(AlertSerializer.class)
+                .build();
+
         binder.bindEgress(alert);
     }
 }
