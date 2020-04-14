@@ -13,11 +13,6 @@ RUN apk --no-cache --update-cache add \
     libpng-dev \
     openblas-dev
 
-# The following two lines would be removed once statefun would be published to PyPI
-COPY apache_flink_statefun-2.0_SNAPSHOT-py3-none-any.whl /app
-
-RUN pip install apache_flink_statefun-2.0_SNAPSHOT-py3-none-any.whl
-
 COPY requirements.txt /app
 
 RUN pip install -r requirements.txt

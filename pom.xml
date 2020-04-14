@@ -48,7 +48,7 @@ under the License.
         <protobuf.version>3.7.1</protobuf.version>
         <protoc-jar-maven-plugin.version>3.11.1</protoc-jar-maven-plugin.version>
         <flink.version>1.10.0</flink.version>
-        <flink.statefun.version>2.0-SNAPSHOT</flink.statefun.version>
+        <flink.statefun.version>2.0.0</flink.statefun.version>
     </properties>
 
     <modules>

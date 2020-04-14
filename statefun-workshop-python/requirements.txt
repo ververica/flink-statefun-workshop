@@ -1,4 +1,4 @@
-apache-flink-statefun
+apache-flink-statefun==2.0.0
 flask
 gunicorn==20.0.4
 numpy==1.15.3
