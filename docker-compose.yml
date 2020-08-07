@@ -15,8 +15,7 @@
 version: "2.1"
 services:
   python_model:
-    #build: statefun-workshop-python
-    image: statefun-workshop-python:latest
+    build: statefun-workshop-python
     ports:
     - "8000:8000"
   master:
