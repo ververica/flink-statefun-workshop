@@ -58,59 +58,6 @@ under the License.
     </modules>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.github.os72</groupId>
-                    <artifactId>protoc-jar-maven-plugin</artifactId>
-                    <version>${protoc-jar-maven-plugin.version}</version>
-                    <executions>
-                        <!-- Generate src/main/protobuf -->
-                        <execution>
-                            <id>generate-protobuf-sources</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <includeStdTypes>true</includeStdTypes>
-                                <protocVersion>${protobuf.version}</protocVersion>
-                                <cleanOutputFolder>true</cleanOutputFolder>
-                                <outputDirectory>${basedir}/target/generated-sources/protoc-jar</outputDirectory>
-                            </configuration>
-                        </execution>
-
-                        <!-- Generate src/test/protobuf -->
-                        <execution>
-                            <id>generate-protobuf-test-sources</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <includeStdTypes>true</includeStdTypes>
-                                <addProtoSources>all</addProtoSources>
-                                <protocVersion>${protobuf.version}</protocVersion>
-                                <inputDirectories>
-                                    <include>src/test/protobuf</include>
-                                </inputDirectories>
-                                <outputTargets>
-                                    <outputTarget>
-                                        <type>descriptor</type>
-                                        <outputDirectory>${basedir}/target/test-classes</outputDirectory>
-                                    </outputTarget>
-                                    <outputTarget>
-                                        <type>java</type>
-                                        <outputDirectory>${basedir}/target/generated-test-sources/protoc-jar</outputDirectory>
-                                    </outputTarget>
-                                </outputTargets>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <!-- Java compiler -->
             <plugin>
