@@ -30,11 +30,6 @@ under the License.
     <dependencies>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>statefun-kafka-io</artifactId>
-            <version>${flink.statefun.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
             <artifactId>statefun-flink-io</artifactId>
             <version>${flink.statefun.version}</version>
             <scope>provided</scope>
