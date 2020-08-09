@@ -21,5 +21,5 @@ COPY main.py /app
 
 COPY entities_pb2.py /app
 
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w 4", "main:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8888", "-w 4", "main:app"]
 

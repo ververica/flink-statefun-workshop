@@ -25,5 +25,5 @@ module:
             kind: http
             type: ververica/model
           spec:
-            endpoint: http://python_model:8000/statefun
+            endpoint: http://python_model:8888/statefun
             maxNumBatchRequests: 100
