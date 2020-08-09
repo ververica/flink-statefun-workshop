@@ -21,7 +21,7 @@ import static com.ververica.statefun.workshop.io.identifiers.CONFIRM_FRAUD;
 import static com.ververica.statefun.workshop.io.identifiers.TRANSACTIONS;
 
 import com.ververica.statefun.workshop.generated.Transaction;
-import com.ververica.statefun.workshop.io.local.ConfirmedTransactionSource;
+import com.ververica.statefun.workshop.io.local.ConfirmedFraudSource;
 import com.ververica.statefun.workshop.io.local.TransactionSource;
 import com.ververica.statefun.workshop.io.local.FeedbackChannel;
 
@@ -42,7 +42,7 @@ public class RunnerTest {
 				new Harness()
 					.withGlobalConfiguration("io-type", "local")
 					.withGlobalConfiguration("local.transaction-rate", "10s")
-					.withFlinkSourceFunction(CONFIRM_FRAUD, new ConfirmedTransactionSource(10))
+					.withFlinkSourceFunction(CONFIRM_FRAUD, new ConfirmedFraudSource(10))
 					.withFlinkSourceFunction(TRANSACTIONS, new TransactionSource(10))
 					.withConsumingEgress(ALERT, new TransactionConsumer());
 
