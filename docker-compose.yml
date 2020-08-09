@@ -17,7 +17,7 @@ services:
   python_model:
     build: statefun-workshop-python
     ports:
-    - "8000:8000"
+    - "8888:8888"
   master:
     build:
       context: .
