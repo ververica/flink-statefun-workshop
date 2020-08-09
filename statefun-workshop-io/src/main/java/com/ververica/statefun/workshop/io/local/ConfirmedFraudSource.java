@@ -22,13 +22,13 @@ import org.apache.flink.util.Preconditions;
 
 import java.util.concurrent.TimeUnit;
 
-public class ConfirmedTransactionSource extends RichSourceFunction<ConfirmFraud> {
+public class ConfirmedFraudSource extends RichSourceFunction<ConfirmFraud> {
 
     private final int maxRecordsPerSecond;
 
     private volatile boolean running = true;
 
-    public ConfirmedTransactionSource(int maxRecordsPerSecond) {
+    public ConfirmedFraudSource(int maxRecordsPerSecond) {
         Preconditions.checkArgument(
                 maxRecordsPerSecond == -1 || maxRecordsPerSecond > 0,
                 "maxRecordsPerSecond must be positive or -1 (infinite)");

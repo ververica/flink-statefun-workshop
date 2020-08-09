@@ -24,7 +24,7 @@ import com.ververica.statefun.workshop.generated.ConfirmFraud;
 import com.ververica.statefun.workshop.generated.Transaction;
 import java.util.Map;
 
-import com.ververica.statefun.workshop.io.local.ConfirmedTransactionSource;
+import com.ververica.statefun.workshop.io.local.ConfirmedFraudSource;
 import com.ververica.statefun.workshop.io.local.TransactionLoggerSink;
 import com.ververica.statefun.workshop.io.local.TransactionSource;
 import org.apache.flink.statefun.flink.io.datastream.SinkFunctionSpec;
@@ -50,7 +50,7 @@ public class WorkshopIOModule implements StatefulFunctionModule {
 
         IngressSpec<ConfirmFraud> confirmedFraud = new SourceFunctionSpec<>(
                 CONFIRM_FRAUD,
-                new ConfirmedTransactionSource(10));
+                new ConfirmedFraudSource(10));
 
         binder.bindIngress(confirmedFraud);
 
