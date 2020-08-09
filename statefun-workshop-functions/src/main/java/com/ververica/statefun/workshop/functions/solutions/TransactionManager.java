@@ -41,7 +41,7 @@ public class TransactionManager implements StatefulFunction {
     private final PersistedValue<Transaction> transactionState = PersistedValue.of("transaction", Transaction.class);
 
     @Persisted
-    private final PersistedValue<Integer> recentFraud = PersistedValue.of("recent-fraud", Integer.class);
+    private final PersistedValue<Integer> recentFraudCount = PersistedValue.of("recent-fraud-count", Integer.class);
 
     @Persisted
     private final PersistedValue<MerchantScore> merchantScore = PersistedValue.of("merchant-score", MerchantScore.class);
@@ -61,7 +61,7 @@ public class TransactionManager implements StatefulFunction {
 
         if (input instanceof ReportedFraud) {
             ReportedFraud reported = (ReportedFraud) input;
-            recentFraud.set(reported.getCount());
+            recentFraudCount.set(reported.getCount());
 
             MerchantScore merchant = merchantScore.get();
             if (merchant != null) {
@@ -73,7 +73,7 @@ public class TransactionManager implements StatefulFunction {
             MerchantScore reportedScore = (MerchantScore) input;
             merchantScore.set(reportedScore);
 
-            Integer count = recentFraud.get();
+            Integer count = recentFraudCount.get();
             if (count != null) {
                 score(context, reportedScore, count);
             }
@@ -91,7 +91,7 @@ public class TransactionManager implements StatefulFunction {
             }
 
             transactionState.clear();
-            recentFraud.clear();
+            recentFraudCount.clear();
             merchantScore.clear();
         }
     }
