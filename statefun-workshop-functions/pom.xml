@@ -34,6 +34,11 @@ under the License.
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.ververica</groupId>
+            <artifactId>statefun-workshop-io</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>statefun-sdk</artifactId>
             <version>${flink.statefun.version}</version>
@@ -41,6 +46,12 @@ under the License.
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>statefun-testutil</artifactId>
+            <version>${flink.statefun.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>statefun-flink-harness</artifactId>
             <version>${flink.statefun.version}</version>
             <scope>test</scope>
         </dependency>
