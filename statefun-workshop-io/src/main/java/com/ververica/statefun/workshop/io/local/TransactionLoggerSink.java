@@ -23,8 +23,6 @@ import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class TransactionLoggerSink extends RichSinkFunction<Transaction> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransactionLoggerSink.class);
@@ -40,10 +38,7 @@ public class TransactionLoggerSink extends RichSinkFunction<Transaction> {
     public void invoke(Transaction value, Context context) {
         counter.inc();
 
-        // Confirm 5% of alerts as confirmed fraud
-        if (ThreadLocalRandom.current().nextDouble() >= 0.95) {
-            FeedbackChannel.queue.offer(value.getAccount());
-        }
+        FeedbackChannel.confirmSomeAsFraud(value);
 
         LOG.info(String.format("Suspected Fraud for account id %s at %s", value.getAccount(), value.getMerchant()));
     }
