@@ -31,6 +31,12 @@ import org.apache.flink.statefun.flink.harness.io.SerializableConsumer;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * This "test" allows the app to be run in an IDE, w/o Docker.
+ * It depends on the remote function described in
+ * statefun-workshop-functions/resources/module.yaml
+ * being available.
+ */
 
 public class RunnerTest {
 
