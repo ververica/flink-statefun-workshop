@@ -24,7 +24,7 @@ from statefun import RequestReplyHandler
 from entities_pb2 import FraudScore
 from entities_pb2 import FeatureVector
 
-import numpy as np
+import random
 
 functions = StatefulFunctions()
 
@@ -37,7 +37,8 @@ def score(context, message: FeatureVector):
     min_score = min(message.fraud_count, 99)
 
     result = FraudScore()
-    result.score = np.random.randint(low=min_score, high=100)
+
+    result.score = random.randint(a=min_score, b=100)
 
     envelope = Any()
     envelope.Pack(result)
