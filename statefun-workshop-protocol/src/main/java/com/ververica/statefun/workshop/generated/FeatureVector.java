@@ -52,6 +52,11 @@ private static final long serialVersionUID = 0L;
             merchantScore_ = input.readInt32();
             break;
           }
+          case 24: {
+
+            amount_ = input.readInt32();
+            break;
+          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -102,6 +107,15 @@ private static final long serialVersionUID = 0L;
     return merchantScore_;
   }
 
+  public static final int AMOUNT_FIELD_NUMBER = 3;
+  private int amount_;
+  /**
+   * <code>int32 amount = 3;</code>
+   */
+  public int getAmount() {
+    return amount_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -122,6 +136,9 @@ private static final long serialVersionUID = 0L;
     if (merchantScore_ != 0) {
       output.writeInt32(2, merchantScore_);
     }
+    if (amount_ != 0) {
+      output.writeInt32(3, amount_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -138,6 +155,10 @@ private static final long serialVersionUID = 0L;
     if (merchantScore_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, merchantScore_);
+    }
+    if (amount_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(3, amount_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -158,6 +179,8 @@ private static final long serialVersionUID = 0L;
         != other.getFraudCount()) return false;
     if (getMerchantScore()
         != other.getMerchantScore()) return false;
+    if (getAmount()
+        != other.getAmount()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -173,6 +196,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getFraudCount();
     hash = (37 * hash) + MERCHANT_SCORE_FIELD_NUMBER;
     hash = (53 * hash) + getMerchantScore();
+    hash = (37 * hash) + AMOUNT_FIELD_NUMBER;
+    hash = (53 * hash) + getAmount();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -310,6 +335,8 @@ private static final long serialVersionUID = 0L;
 
       merchantScore_ = 0;
 
+      amount_ = 0;
+
       return this;
     }
 
@@ -338,6 +365,7 @@ private static final long serialVersionUID = 0L;
       com.ververica.statefun.workshop.generated.FeatureVector result = new com.ververica.statefun.workshop.generated.FeatureVector(this);
       result.fraudCount_ = fraudCount_;
       result.merchantScore_ = merchantScore_;
+      result.amount_ = amount_;
       onBuilt();
       return result;
     }
@@ -391,6 +419,9 @@ private static final long serialVersionUID = 0L;
       }
       if (other.getMerchantScore() != 0) {
         setMerchantScore(other.getMerchantScore());
+      }
+      if (other.getAmount() != 0) {
+        setAmount(other.getAmount());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -469,6 +500,32 @@ private static final long serialVersionUID = 0L;
     public Builder clearMerchantScore() {
       
       merchantScore_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private int amount_ ;
+    /**
+     * <code>int32 amount = 3;</code>
+     */
+    public int getAmount() {
+      return amount_;
+    }
+    /**
+     * <code>int32 amount = 3;</code>
+     */
+    public Builder setAmount(int value) {
+      
+      amount_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int32 amount = 3;</code>
+     */
+    public Builder clearAmount() {
+      
+      amount_ = 0;
       onChanged();
       return this;
     }

@@ -40,6 +40,6 @@ public class TransactionLoggerSink extends RichSinkFunction<Transaction> {
 
         FeedbackChannel.confirmSomeAsFraud(value);
 
-        LOG.info(String.format("Suspected Fraud for account id %s at %s", value.getAccount(), value.getMerchant()));
+        LOG.info(String.format("Suspected Fraud for account id %s at %s for %d USD", value.getAccount(), value.getMerchant(), value.getAmount()));
     }
 }

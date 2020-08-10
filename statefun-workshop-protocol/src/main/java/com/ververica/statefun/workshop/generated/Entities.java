@@ -87,20 +87,20 @@ public final class Entities {
       "amp.proto\"\037\n\014ConfirmFraud\022\017\n\007account\030\001 \001" +
       "(\t\"o\n\013Transaction\022\017\n\007account\030\001 \001(\t\022-\n\tti" +
       "mestamp\030\002 \001(\0132\032.google.protobuf.Timestam" +
-      "p\022\020\n\010merchant\030\003 \001(\t\022\016\n\006amount\030\004 \001(\005\"<\n\rF" +
+      "p\022\020\n\010merchant\030\003 \001(\t\022\016\n\006amount\030\004 \001(\005\"L\n\rF" +
       "eatureVector\022\023\n\013fraud_count\030\001 \001(\005\022\026\n\016mer" +
-      "chant_score\030\002 \001(\005\"\033\n\nFraudScore\022\r\n\005score" +
-      "\030\001 \001(\005\"\036\n\rReportedFraud\022\r\n\005count\030\001 \001(\005\"\r" +
-      "\n\013ExpireFraud\"\014\n\nQueryFraud\"-\n\rMerchantS" +
-      "core\022\r\n\005score\030\001 \001(\005\022\r\n\005error\030\002 \001(\010\"\024\n\022Qu" +
-      "eryMerchantScore\"\331\001\n\020MerchantMetadata\022*\n" +
-      "\007address\030\001 \001(\0132\031.MerchantMetadata.Addres" +
-      "s\022\032\n\022remaining_attempts\030\002 \001(\005\032/\n\014Functio" +
-      "nType\022\021\n\tnamespace\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\032L" +
-      "\n\007Address\022\n\n\002id\030\001 \001(\t\0225\n\rfunction_type\030\002" +
-      " \001(\0132\036.MerchantMetadata.FunctionTypeB-\n)" +
-      "com.ververica.statefun.workshop.generate" +
-      "dP\001b\006proto3"
+      "chant_score\030\002 \001(\005\022\016\n\006amount\030\003 \001(\005\"\033\n\nFra" +
+      "udScore\022\r\n\005score\030\001 \001(\005\"\036\n\rReportedFraud\022" +
+      "\r\n\005count\030\001 \001(\005\"\r\n\013ExpireFraud\"\014\n\nQueryFr" +
+      "aud\"-\n\rMerchantScore\022\r\n\005score\030\001 \001(\005\022\r\n\005e" +
+      "rror\030\002 \001(\010\"\024\n\022QueryMerchantScore\"\331\001\n\020Mer" +
+      "chantMetadata\022*\n\007address\030\001 \001(\0132\031.Merchan" +
+      "tMetadata.Address\022\032\n\022remaining_attempts\030" +
+      "\002 \001(\005\032/\n\014FunctionType\022\021\n\tnamespace\030\001 \001(\t" +
+      "\022\014\n\004name\030\002 \001(\t\032L\n\007Address\022\n\n\002id\030\001 \001(\t\0225\n" +
+      "\rfunction_type\030\002 \001(\0132\036.MerchantMetadata." +
+      "FunctionTypeB-\n)com.ververica.statefun.w" +
+      "orkshop.generatedP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -132,7 +132,7 @@ public final class Entities {
     internal_static_FeatureVector_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_FeatureVector_descriptor,
-        new java.lang.String[] { "FraudCount", "MerchantScore", });
+        new java.lang.String[] { "FraudCount", "MerchantScore", "Amount", });
     internal_static_FraudScore_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_FraudScore_fieldAccessorTable = new

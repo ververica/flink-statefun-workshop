@@ -37,6 +37,7 @@ message Transaction {
 message FeatureVector {
     int32 fraud_count    = 1;
     int32 merchant_score = 2;
+    int32 amount = 3;
 }
 
 message FraudScore {
