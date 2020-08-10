@@ -97,7 +97,10 @@ public class TransactionManager implements StatefulFunction {
     }
 
     private void score(Context context, MerchantScore merchant, Integer count) {
-        FeatureVector.Builder vector = FeatureVector.newBuilder().setFraudCount(count);
+        FeatureVector.Builder vector = FeatureVector
+            .newBuilder()
+            .setFraudCount(count)
+            .setAmount(transactionState.get().getAmount());
 
         if (!merchant.getError()) {
             vector.setMerchantScore(merchant.getScore());

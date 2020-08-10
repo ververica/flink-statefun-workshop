@@ -35,7 +35,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n)com.ververica.statefun.workshop.generatedP\001'),
-  serialized_pb=_b('\n\x0e\x65ntities.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x1f\n\x0c\x43onfirmFraud\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\"o\n\x0bTransaction\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08merchant\x18\x03 \x01(\t\x12\x0e\n\x06\x61mount\x18\x04 \x01(\x05\"<\n\rFeatureVector\x12\x13\n\x0b\x66raud_count\x18\x01 \x01(\x05\x12\x16\n\x0emerchant_score\x18\x02 \x01(\x05\"\x1b\n\nFraudScore\x12\r\n\x05score\x18\x01 \x01(\x05\"\x1e\n\rReportedFraud\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\r\n\x0b\x45xpireFraud\"\x0c\n\nQueryFraud\"-\n\rMerchantScore\x12\r\n\x05score\x18\x01 \x01(\x05\x12\r\n\x05\x65rror\x18\x02 \x01(\x08\"\x14\n\x12QueryMerchantScore\"\xd9\x01\n\x10MerchantMetadata\x12*\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0b\x32\x19.MerchantMetadata.Address\x12\x1a\n\x12remaining_attempts\x18\x02 \x01(\x05\x1a/\n\x0c\x46unctionType\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x1aL\n\x07\x41\x64\x64ress\x12\n\n\x02id\x18\x01 \x01(\t\x12\x35\n\rfunction_type\x18\x02 \x01(\x0b\x32\x1e.MerchantMetadata.FunctionTypeB-\n)com.ververica.statefun.workshop.generatedP\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x0e\x65ntities.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x1f\n\x0c\x43onfirmFraud\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\"o\n\x0bTransaction\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08merchant\x18\x03 \x01(\t\x12\x0e\n\x06\x61mount\x18\x04 \x01(\x05\"L\n\rFeatureVector\x12\x13\n\x0b\x66raud_count\x18\x01 \x01(\x05\x12\x16\n\x0emerchant_score\x18\x02 \x01(\x05\x12\x0e\n\x06\x61mount\x18\x03 \x01(\x05\"\x1b\n\nFraudScore\x12\r\n\x05score\x18\x01 \x01(\x05\"\x1e\n\rReportedFraud\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\"\r\n\x0b\x45xpireFraud\"\x0c\n\nQueryFraud\"-\n\rMerchantScore\x12\r\n\x05score\x18\x01 \x01(\x05\x12\r\n\x05\x65rror\x18\x02 \x01(\x08\"\x14\n\x12QueryMerchantScore\"\xd9\x01\n\x10MerchantMetadata\x12*\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0b\x32\x19.MerchantMetadata.Address\x12\x1a\n\x12remaining_attempts\x18\x02 \x01(\x05\x1a/\n\x0c\x46unctionType\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x1aL\n\x07\x41\x64\x64ress\x12\n\n\x02id\x18\x01 \x01(\t\x12\x35\n\rfunction_type\x18\x02 \x01(\x0b\x32\x1e.MerchantMetadata.FunctionTypeB-\n)com.ververica.statefun.workshop.generatedP\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -146,6 +146,13 @@ _FEATUREVECTOR = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='amount', full_name='FeatureVector.amount', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -159,7 +166,7 @@ _FEATUREVECTOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=197,
-  serialized_end=257,
+  serialized_end=273,
 )
 
 
@@ -189,8 +196,8 @@ _FRAUDSCORE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=259,
-  serialized_end=286,
+  serialized_start=275,
+  serialized_end=302,
 )
 
 
@@ -220,8 +227,8 @@ _REPORTEDFRAUD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=288,
-  serialized_end=318,
+  serialized_start=304,
+  serialized_end=334,
 )
 
 
@@ -244,8 +251,8 @@ _EXPIREFRAUD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=320,
-  serialized_end=333,
+  serialized_start=336,
+  serialized_end=349,
 )
 
 
@@ -268,8 +275,8 @@ _QUERYFRAUD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=335,
-  serialized_end=347,
+  serialized_start=351,
+  serialized_end=363,
 )
 
 
@@ -306,8 +313,8 @@ _MERCHANTSCORE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=349,
-  serialized_end=394,
+  serialized_start=365,
+  serialized_end=410,
 )
 
 
@@ -330,8 +337,8 @@ _QUERYMERCHANTSCORE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=396,
-  serialized_end=416,
+  serialized_start=412,
+  serialized_end=432,
 )
 
 
@@ -368,8 +375,8 @@ _MERCHANTMETADATA_FUNCTIONTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=511,
-  serialized_end=558,
+  serialized_start=527,
+  serialized_end=574,
 )
 
 _MERCHANTMETADATA_ADDRESS = _descriptor.Descriptor(
@@ -405,8 +412,8 @@ _MERCHANTMETADATA_ADDRESS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=560,
-  serialized_end=636,
+  serialized_start=576,
+  serialized_end=652,
 )
 
 _MERCHANTMETADATA = _descriptor.Descriptor(
@@ -442,8 +449,8 @@ _MERCHANTMETADATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=419,
-  serialized_end=636,
+  serialized_start=435,
+  serialized_end=652,
 )
 
 _TRANSACTION.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP

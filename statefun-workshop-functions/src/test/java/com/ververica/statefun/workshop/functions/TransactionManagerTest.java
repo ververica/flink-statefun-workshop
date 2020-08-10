@@ -43,11 +43,13 @@ public class TransactionManagerTest {
 
     private static final String MERCHANT = "merchant-id";
 
+    private static final Integer AMOUNT = 100;
+
     private static final Transaction TRANSACTION = Transaction.newBuilder()
             .setAccount(ACCOUNT)
             .setMerchant(MERCHANT)
             .setTimestamp(Timestamp.getDefaultInstance())
-            .setAmount(100)
+            .setAmount(AMOUNT)
             .build();
 
     @Test
@@ -67,6 +69,8 @@ public class TransactionManagerTest {
 
         harness.invoke(TRANSACTION);
 
+        FeatureVector expectedVector = FeatureVector.newBuilder().setAmount(AMOUNT).setFraudCount(1).setMerchantScore(1).build();
+
         Assert.assertThat(harness.invoke(ReportedFraud.newBuilder().setCount(1).build()), sentNothing());
 
         Assert.assertThat(
@@ -74,7 +78,7 @@ public class TransactionManagerTest {
             sent(
                 messagesTo(
                     new Address(MODEL_FN, ACCOUNT),
-                    equalTo(Any.pack(FeatureVector.newBuilder().setFraudCount(1).setMerchantScore(1).build())))));
+                    equalTo(Any.pack(expectedVector)))));
     }
 
     @Test
@@ -83,6 +87,8 @@ public class TransactionManagerTest {
 
         harness.invoke(TRANSACTION);
 
+        FeatureVector expectedVector = FeatureVector.newBuilder().setAmount(AMOUNT).setFraudCount(1).setMerchantScore(1).build();
+
         Assert.assertThat(harness.invoke(MerchantScore.newBuilder().setScore(1).build()), sentNothing());
 
         Assert.assertThat(
@@ -90,7 +96,7 @@ public class TransactionManagerTest {
             sent(
                 messagesTo(
                     new Address(MODEL_FN, ACCOUNT),
-                    equalTo(Any.pack(FeatureVector.newBuilder().setFraudCount(1).setMerchantScore(1).build())))));
+                    equalTo(Any.pack(expectedVector)))));
     }
 
     @Test

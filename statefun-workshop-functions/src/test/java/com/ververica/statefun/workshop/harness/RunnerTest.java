@@ -62,7 +62,7 @@ public class RunnerTest {
 		@Override
 		public void accept(Transaction t) {
 			FeedbackChannel.confirmSomeAsFraud(t);
-			String msg = String.format("Suspected Fraud for account id %s at %s", t.getAccount(), t.getMerchant());
+			String msg = String.format("Suspected Fraud for account id %s at %s for %d USD", t.getAccount(), t.getMerchant(), t.getAmount());
 			System.out.println(msg);
 		}
 	}

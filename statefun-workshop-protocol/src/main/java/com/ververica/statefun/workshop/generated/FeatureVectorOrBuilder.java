@@ -16,4 +16,9 @@ public interface FeatureVectorOrBuilder extends
    * <code>int32 merchant_score = 2;</code>
    */
   int getMerchantScore();
+
+  /**
+   * <code>int32 amount = 3;</code>
+   */
+  int getAmount();
 }
