@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.functions.exercises;
+package com.ververica.statefun.workshop.functions;
 
+import com.ververica.statefun.workshop.generated.ConfirmFraud;
+import com.ververica.statefun.workshop.generated.QueryFraud;
 import com.ververica.statefun.workshop.generated.ExpireFraud;
 import com.ververica.statefun.workshop.generated.ReportedFraud;
-import com.ververica.statefun.workshop.generated.QueryFraud;
+import java.time.Duration;
 import org.apache.flink.statefun.sdk.Context;
 import org.apache.flink.statefun.sdk.StatefulFunction;
+import org.apache.flink.statefun.sdk.annotations.Persisted;
+import org.apache.flink.statefun.sdk.state.PersistedValue;
 
 /**
  * This function tracks the total number of reported fraudulent transactions made against an account
  * on a rolling 30 day period. It supports three three message types:
  *
- * <p>1) {@code ConfirmFraud}: When a customer reports a fraudulent transaction the function will
+ * <p>1) {@link ConfirmFraud}: When a customer reports a fraudulent transaction the function will
  * receive this message. It will increment it's internal count and set a 30 day expiration timer.
  *
  * <p>2) {@link ExpireFraud}: After 30 days, the function will receive an expiration message. At
@@ -38,6 +42,31 @@ import org.apache.flink.statefun.sdk.StatefulFunction;
  */
 public class FraudCount implements StatefulFunction {
 
+    @Persisted
+    private final PersistedValue<Integer> count = PersistedValue.of("count", Integer.class);
+
     @Override
-    public void invoke(Context context, Object input) {}
+    public void invoke(Context context, Object input) {
+        if (input instanceof ConfirmFraud) {
+            int current = count.getOrDefault(0);
+            count.set(current + 1);
+
+            context.sendAfter(Duration.ofDays(30), context.self(), ExpireFraud.getDefaultInstance());
+        }
+
+        if (input instanceof ExpireFraud) {
+            int current = count.getOrDefault(0);
+            if (current == 0 || current == 1) {
+                count.clear();
+            }
+
+            count.set(current - 1);
+        }
+
+        if (input instanceof QueryFraud) {
+            int current = count.getOrDefault(0);
+            ReportedFraud response = ReportedFraud.newBuilder().setCount(current).build();
+            context.reply(response);
+        }
+    }
 }

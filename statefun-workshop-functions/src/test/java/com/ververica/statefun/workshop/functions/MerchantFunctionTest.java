@@ -20,7 +20,6 @@ import static com.ververica.statefun.workshop.identifiers.MERCHANT_FN;
 import static org.apache.flink.statefun.testutils.matchers.StatefulFunctionMatchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.ververica.statefun.workshop.functions.exercises.MerchantFunction;
 import com.ververica.statefun.workshop.generated.MerchantScore;
 import com.ververica.statefun.workshop.generated.QueryMerchantScore;
 import com.ververica.statefun.workshop.utils.MerchantScoreService;
@@ -33,14 +32,13 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class MerchantFunctionTest {
 
     private static String SELF_ID = "my-id";
 
     private static Address CALLER = new Address(new FunctionType("ververica", "caller"), "id");
 
-     @Test
+    @Test
     public void testAsyncOperation() {
         FunctionTestHarness harness = FunctionTestHarness.test(new TestProvider(), MERCHANT_FN, SELF_ID);
 
@@ -69,7 +67,7 @@ public class MerchantFunctionTest {
 
     private static class TestProvider implements StatefulFunctionProvider {
 
-         @Override
+        @Override
         public StatefulFunction functionOfType(FunctionType type) {
             MerchantScoreService client = MockMerchantScoreService.builder().withResponse(1).build();
 

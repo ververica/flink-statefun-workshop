@@ -20,8 +20,8 @@ import static com.ververica.statefun.workshop.identifiers.*;
 import static com.ververica.statefun.workshop.io.identifiers.CONFIRM_FRAUD;
 import static com.ververica.statefun.workshop.io.identifiers.TRANSACTIONS;
 
-import com.ververica.statefun.workshop.functions.solutions.FraudCount;
-import com.ververica.statefun.workshop.functions.solutions.TransactionManager;
+import com.ververica.statefun.workshop.functions.FraudCount;
+import com.ververica.statefun.workshop.functions.TransactionManager;
 import com.ververica.statefun.workshop.provider.MerchantProvider;
 import com.ververica.statefun.workshop.routers.ConfirmFraudRouter;
 import com.ververica.statefun.workshop.routers.TransactionRouter;

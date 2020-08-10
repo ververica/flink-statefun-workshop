@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.functions.solutions;
+package com.ververica.statefun.workshop.functions;
 
 import static com.ververica.statefun.workshop.identifiers.*;
 import static com.ververica.statefun.workshop.io.identifiers.ALERT;
