@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.ververica.statefun.workshop.functions.exercises;
+package com.ververica.statefun.workshop.functions;
 
 import com.ververica.statefun.workshop.generated.MerchantMetadata;
 import com.ververica.statefun.workshop.generated.MerchantScore;
 import com.ververica.statefun.workshop.generated.QueryMerchantScore;
 import com.ververica.statefun.workshop.utils.MerchantScoreService;
 import org.apache.flink.statefun.sdk.Address;
+import org.apache.flink.statefun.sdk.AsyncOperationResult;
 import org.apache.flink.statefun.sdk.Context;
 import org.apache.flink.statefun.sdk.FunctionType;
 import org.apache.flink.statefun.sdk.StatefulFunction;
@@ -44,7 +45,43 @@ public class MerchantFunction implements StatefulFunction {
     }
 
     @Override
-    public void invoke(Context context, Object input) {}
+    @SuppressWarnings("unchecked")
+    public void invoke(Context context, Object input) {
+        if (input instanceof QueryMerchantScore) {
+            queryService(context, context.caller(), 2);
+        }
+
+        if (input instanceof AsyncOperationResult) {
+            AsyncOperationResult<MerchantMetadata, Integer> result =
+                    (AsyncOperationResult<MerchantMetadata, Integer>) input;
+
+            MerchantMetadata metadata = result.metadata();
+            if (result.unknown()) {
+                queryService(context, getStatefunAddress(metadata), metadata.getRemainingAttempts());
+            } else if (result.failure()) {
+                if (metadata.getRemainingAttempts() == 0) {
+                    context.send(getStatefunAddress(metadata), error());
+                } else {
+                    queryService(context, getStatefunAddress(metadata), metadata.getRemainingAttempts() - 1);
+                }
+            } else {
+
+                context.send(getStatefunAddress(metadata),  score(result.value()));
+            }
+        }
+    }
+
+    /**
+     * Query the external service and register the future as a callback.
+     *
+     * @param context The function context.
+     * @param address The address where the final result should be sent.
+     * @param attempts The number of remaining attempts.
+     */
+    private void queryService(Context context, Address address, int attempts) {
+        MerchantMetadata metadata = newMetadata(address, attempts);
+        context.registerAsyncOperation(metadata, client.query(context.self().id()));
+    }
 
     /**
      * A utility for building a {@link MerchantScore} when given a valid score.
@@ -71,10 +108,10 @@ public class MerchantFunction implements StatefulFunction {
         return MerchantMetadata.newBuilder()
                 .setRemainingAttempts(attempts)
                 .setAddress(MerchantMetadata.Address.newBuilder()
-                        .setId(address.id())
-                        .setFunctionType(MerchantMetadata.FunctionType.newBuilder()
-                                .setNamespace(address.type().namespace())
-                                .setName(address.type().name())))
+                    .setId(address.id())
+                    .setFunctionType(MerchantMetadata.FunctionType.newBuilder()
+                        .setNamespace(address.type().namespace())
+                        .setName(address.type().name())))
                 .build();
     }
 
