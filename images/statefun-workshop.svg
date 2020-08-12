@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-################################################################################
-#  Licensed to the Ververica GmbH under one
-#  or more contributor license agreements.  See the NOTICE file
-#  distributed with this work for additional information
-#  regarding copyright ownership.  The ASF licenses this file
-#  to you under the Apache License, Version 2.0 (the
-#  "License"); you may not use this file except in compliance
-#  with the License.  You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-# limitations under the License.
-################################################################################
+/*
+ * Copyright 2020 Ververica GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="-61.5 59.5 990.4097 618" width="990.4097" height="618">
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="-61.5 71.5 990.4097 606" width="990.4097" height="606">
   <defs>
     <font-face font-family="Open Sans" font-size="18" panose-1="2 11 6 6 3 5 4 2 2 4" units-per-em="1000" underline-position="-75.19531" underline-thickness="49.80469" slope="0" x-height="535.15625" cap-height="713.8672" ascent="1068.8477" descent="-292.96875" font-weight="400">
       <font-face-src>
@@ -46,18 +44,13 @@
         <path d="M -4.8 0 L 0 1.8 L 0 -1.8 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
       </g>
     </marker>
-    <font-face font-family="Open Sans" font-size="15" panose-1="2 11 6 6 3 5 4 2 2 4" units-per-em="1000" underline-position="-75.19531" underline-thickness="49.80469" slope="-800" x-height="535.15625" cap-height="713.8672" ascent="1068.8477" descent="-292.96875" font-style="italic" font-weight="400">
-      <font-face-src>
-        <font-face-name name="OpenSans-Italic"/>
-      </font-face-src>
-    </font-face>
     <font-face font-family="Open Sans" font-size="13" panose-1="2 11 6 6 3 5 4 2 2 4" units-per-em="1000" underline-position="-75.19531" underline-thickness="49.80469" slope="0" x-height="535.15625" cap-height="713.8672" ascent="1068.8477" descent="-292.96875" font-weight="400">
       <font-face-src>
         <font-face-name name="OpenSans"/>
       </font-face-src>
     </font-face>
   </defs>
-  <metadata> Produced by OmniGraffle 7.17.2\n2020-08-09 15:36:50 +0000</metadata>
+  <metadata> Produced by OmniGraffle 7.17.2\n2020-08-11 17:38:25 +0000</metadata>
   <g id="Canvas_1" stroke-dasharray="none" stroke="none" fill-opacity="1" stroke-opacity="1" fill="none">
     <title>Canvas 1</title>
     <g id="Canvas_1_Layer_1">
@@ -237,20 +230,14 @@
         </text>
       </g>
       <g id="Graphic_56">
-        <path d="M 730.3241 59.5 L 853.2295 59.5 C 859.857 59.5 865.2295 64.87258 865.2295 71.5 L 865.2295 116.1822 C 865.2295 122.80962 859.857 128.1822 853.2295 128.1822 L 730.3241 128.1822 C 723.6967 128.1822 718.3241 122.80962 718.3241 116.1822 L 718.3241 71.5 C 718.3241 64.87258 723.6967 59.5 730.3241 59.5 Z" fill="#aecbcc"/>
-        <text transform="translate(723.3241 73.8411)" fill="black">
+        <path d="M 723.6038 71.5 L 846.5092 71.5 C 853.1366 71.5 858.5092 76.87258 858.5092 83.5 L 858.5092 128.1822 C 858.5092 134.80962 853.1366 140.1822 846.5092 140.1822 L 723.6038 140.1822 C 716.9764 140.1822 711.6038 134.80962 711.6038 128.1822 L 711.6038 83.5 C 711.6038 76.87258 716.9764 71.5 723.6038 71.5 Z" fill="#aecbcc"/>
+        <text transform="translate(716.6038 85.8411)" fill="black">
           <tspan font-family="Open Sans" font-size="15" font-weight="400" fill="black" x="7.130684" y="16">Merchant Scoring</tspan>
           <tspan font-family="Open Sans" font-size="15" font-weight="400" fill="black" x="19.515938" y="36">(Micro)Service</tspan>
         </text>
       </g>
       <g id="Line_57">
-        <line x1="691.24804" y1="193.01774" x2="747.7843" y2="137.24191" marker-end="url(#FilledArrow_Marker)" marker-start="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-      </g>
-      <g id="Graphic_58">
-        <rect x="697.792" y="149.90513" width="43.90381" height="30" fill="white"/>
-        <text transform="translate(702.792 154.90513)" fill="black">
-          <tspan font-family="Open Sans" font-size="15" font-style="italic" font-weight="400" fill="black" x="0" y="16">HTTP</tspan>
-        </text>
+        <line x1="692.4423" y1="193.78513" x2="739.5373" y2="149.06497" marker-end="url(#FilledArrow_Marker)" marker-start="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
       </g>
       <g id="Graphic_76">
         <path d="M 765.7023 439.8436 C 767.6058 439.8436 769.1489 433.67297 769.1489 426.06107 C 769.1489 418.44917 767.6058 412.27847 765.7023 412.27847 L 883.2031 412.27857 C 885.1065 412.27857 886.6496 418.44927 886.6496 426.06117 C 886.6496 433.67307 885.1065 439.8438 883.2031 439.8438 Z" fill="#aecbcc"/>
