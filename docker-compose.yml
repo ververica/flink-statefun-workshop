@@ -23,7 +23,7 @@ services:
     # uncomment build line to rebuild the image
     #build: .
     # uncomment and adjust savepoint path to start from a savepoint
-    command: -s /savepoint-dir/savepoint-3df90d-aa82d691740f
+    #command: -s /savepoint-dir/savepoint-3df90d-aa82d691740f
     expose:
     - "6123"
     ports:
