@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apache-flink-statefun==2.1.0
+apache-flink-statefun==2.2.0
 flask
 gunicorn==20.0.4

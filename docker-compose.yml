@@ -19,9 +19,9 @@ services:
     ports:
     - "8888:8888"
   master:
-    image: ververica/flink-statefun-training:1.0.0
+    image: ververica/flink-statefun-training:1.1.0
     # uncomment build line to rebuild the image
-    #build: .
+    build: .
     # uncomment and adjust savepoint path to start from a savepoint
     #command: -s /savepoint-dir/savepoint-3df90d-aa82d691740f
     expose:
@@ -32,11 +32,11 @@ services:
     - ROLE=master
     - MASTER_HOST=master
     volumes:
-    - ./savepoint-dir:/savepoint-dir
+    - ./checkpoint-dir:/checkpoint-dir
   worker:
-    image: ververica/flink-statefun-training:1.0.0
+    image: ververica/flink-statefun-training:1.1.0
     # uncomment build line to rebuild the image
-    #build: .
+    build: .
     expose:
     - "6121"
     - "6122"
@@ -50,5 +50,5 @@ services:
     - ROLE=worker
     - MASTER_HOST=master
     volumes:
-    - ./savepoint-dir:/savepoint-dir
+    - ./checkpoint-dir:/checkpoint-dir
 

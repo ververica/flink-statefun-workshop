@@ -60,13 +60,18 @@ parallelism.default: 1
 
 rest.bind-port: 8001
 
-classloader.parent-first-patterns.additional: org.apache.flink.statefun;org.apache.kafka;com.google.protobuf
+# Decrease heartbeat timeout. This is set to a very small value
+# for TM failure demonstrations. Do not expect these values to
+# work outside a local setup.
+heartbeat.interval: 1000
+heartbeat.timeout: 5000
 
-jobmanager.scheduler: legacy
+classloader.parent-first-patterns.additional: org.apache.flink.statefun;org.apache.kafka;com.google.protobuf
 
 execution.checkpointing.interval: 10s
 
-state.savepoints.dir: file:///savepoint-dir
+state.checkpoints.dir: file:///checkpoint-dir
+state.savepoints.dir: file:///checkpoint-dir/savepoint
 
 # IO configurations
 

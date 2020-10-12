@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ververica/flink-statefun:2.1.0
+FROM ververica/flink-statefun:2.2.0
 
-RUN mkdir -p /opt/statefun/modules/statefun-workshop-protocol
-RUN mkdir -p /opt/statefun/modules/statefun-workshop-io
-RUN mkdir -p /opt/statefun/modules/statefun-workshop-functions
-RUN mkdir -p /opt/statefun/modules/model
+RUN mkdir -p /opt/statefun/modules/statefun-workshop-protocol; \
+    mkdir -p /opt/statefun/modules/statefun-workshop-io; \
+    mkdir -p /opt/statefun/modules/statefun-workshop-functions; \
+    mkdir -p /opt/statefun/modules/model
 
 ADD flink-conf.yaml $FLINK_HOME/conf/flink-conf.yaml
 
