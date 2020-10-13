@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright 2020 Ververica GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if ! [ -x "$(command -v protoc)" ]; then
-	echo "protoc must be installed to generate classes" >$2
-	exit 1
-fi
+FROM python:3.7-slim-buster
 
-protoc \
-    --proto_path=protobuf/ \
-	--python_out=statefun-functions/ \
-	--python_out=simulator/ \
-	entities.proto
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY requirements.txt /app
+RUN pip install -r requirements.txt
+
+COPY main.py /app
+COPY entities_pb2.py /app
+COPY workshop_util.py /app
+
+EXPOSE 8000
+
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w 4", "main:app"]
+

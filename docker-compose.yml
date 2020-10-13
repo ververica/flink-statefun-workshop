@@ -1,10 +1,11 @@
-# Copyright 2020 Ververica GmbH
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#  http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,41 +15,63 @@
 
 version: "2.1"
 services:
-  python_model:
-    build: statefun-workshop-python
+  zookeeper:
+    image: wurstmeister/zookeeper
     ports:
-    - "8888:8888"
-  master:
-    image: ververica/flink-statefun-training:1.0.0
-    # uncomment build line to rebuild the image
-    #build: .
-    # uncomment and adjust savepoint path to start from a savepoint
-    #command: -s /savepoint-dir/savepoint-3df90d-aa82d691740f
-    expose:
-    - "6123"
+      - "2181:2181"
+  kafka-broker:
+    image: wurstmeister/kafka:2.12-2.0.1
     ports:
-    - "8001:8001"
+      - "9092:9092"
     environment:
-    - ROLE=master
-    - MASTER_HOST=master
-    volumes:
-    - ./savepoint-dir:/savepoint-dir
-  worker:
-    image: ververica/flink-statefun-training:1.0.0
-    # uncomment build line to rebuild the image
-    #build: .
-    expose:
-    - "6121"
-    - "6122"
-    - "6123"
+      HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
+      KAFKA_CREATE_TOPICS: "transactions:1:1,alerts:1:1,confirmed:1:1,thresholds"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     depends_on:
-    - master
-    - python_model
-    links:
-    - "master:master"
-    environment:
-    - ROLE=worker
-    - MASTER_HOST=master
+      - zookeeper
     volumes:
-    - ./savepoint-dir:/savepoint-dir
-
+      - /var/run/docker.sock:/var/run/docker.sock
+  simulator:
+    build:
+      context: simulator 
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka-broker
+  master:
+    build:
+      context: statefun-runtime
+    # uncomment and adjust savepoint path to start from a savepoint
+    # command: -s /savepoint-dir/savepoint-3df90d-aa82d691740f
+    expose:
+      - "6123"
+    ports:
+      - "8001:8001"
+    environment:
+      - ROLE=master
+      - MASTER_HOST=master
+    volumes:
+      - ./checkpoint-dir:/checkpoint-dir
+      - ./savepoint-dir:/savepoint-dir
+  worker:
+    build:
+      context: statefun-runtime
+    expose:
+      - "6121"
+      - "6122"
+    depends_on:
+      - master
+      - kafka-broker
+    links:
+      - "master:master"
+      - "kafka-broker:kafka-broker"
+    environment:
+      - ROLE=worker
+      - MASTER_HOST=master
+    volumes:
+      - ./checkpoint-dir:/checkpoint-dir
+      - ./savepoint-dir:/savepoint-dir
+  python-worker:
+    build:
+      context: ./statefun-functions
+    expose:
+      - "8000"

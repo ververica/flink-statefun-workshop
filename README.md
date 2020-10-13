@@ -2,8 +2,8 @@
 
 ## Setup Instructions
 
-The following instructions guide you through the process of setting up a development environment for the purpose of developing,
-debugging, and executing solutions for the workshop.
+The following instructions guide you through the process of setting up a development environment for developing,
+debugging and executing solutions for the workshop.
 
 ### Software Requirements
 
@@ -15,7 +15,7 @@ The following software is required for running the code for this workshop:
 * Git
 * Docker
 
-For the exercises described below you will also need a text editor for making (minor) modifications to the Python code, and `curl` for using the REST api.
+For the exercises described below, you will also need a text editor for making (minor) modifications to the Python code, and `curl` for using the REST API.
 
 ### Clone and Prepare the Software
 
@@ -25,54 +25,31 @@ $ cd flink-statefun-workshop
 $ docker-compose build
 ```
 
-If you haven’t done this before, at this point you’ll end up downloading all of the dependencies for this project and its Docker image.
+If you haven't done this before, at this point, you'll end up downloading all of the dependencies for this project and its Docker image.
 This usually takes a few minutes, depending on the speed of your internet connection.
 
 ### Get it Running
 
 ```bash
-$ docker-compose up
+$ docker-compose up -d 
 ```
 
-This should produce a lot of output, but after a minute or so you should start to see messages like this,
-interspersed with occasional messages about checkpointing:
+This will start all the cluster components.
+Once everything is up and running, after a minute or so you should start to see messages like this in the simulator logs:
 
 ```
-worker_1  | 2020-08-10 15:03:53,235 INFO  ...  - Suspected Fraud for account id 0x00DD98B2 at Peakhub
-worker_1  | 2020-08-10 15:04:29,997 INFO  ...  - Suspected Fraud for account id 0x00F0AEFA at Overgram
+$ docker-compose logs -f simulator
+
+Attaching to statefun-workshop_simulator_1
+simulator_1      | Suspected Fraud for account id 0x00F3CD51 at Hypergrid for 36 USD
+simulator_1      | Suspected Fraud for account id 0x009D999B at Uparc for 835 USD
 ```
-
-<details>
-<summary>
-Can't use Docker? Click here for a workaround.
-</summary>
-
-Stateful Functions is designed with containers in mind, but it is possible to get this example running without Docker. You'll need a JDK (version 8 or 11), an IDE for Java development, and Python 3. 
-
-For the Python part, you can do this:
-
-```bash
-$ cd statefun-workshop-python
-$ pip install -r requirements.txt
-$ gunicorn -b localhost:8888 -w 4 main:app
-```
-
-Leave the Python web server running, and then bring up Java-based Stateful Functions environment. There's a test you can run that does what's needed, and you can run this test in your IDE: see [RunnerTest](statefun-workshop-functions/src/test/java/com/ververica/statefun/workshop/harness/RunnerTest.java). You will need to first un-ignore this test, and just be aware that it will run continuously until you manually stop it. While it's running, look for output like this in the console:
-
-```
-Suspected Fraud for account id 0x001A0EB6 at Silverspan for 79533 USD
-Suspected Fraud for account id 0x001B9152 at Conow for 91561 USD
-Suspected Fraud for account id 0x0080418E at Corepass for 27660 USD
-Suspected Fraud for account id 0x00CB1AF1 at Coreatlas for 53772 USD
-```
-
-</details>
 
 ## Architecture
 
 ![architecture diagram](images/statefun-workshop.svg)
 
-This Stateful Functions application has two ingresses, one for Transactions (that need to be scored), and another for Transactions that have been confirmed by the customer as having been fraudulent. The egress handles Alert messages for Transactions that have been scored as being possibly fraudulent by the Model.
+This Stateful Functions application is composed of _Remote Functions_ which run in a seperate, stateless container, connected via HTTP. It has two ingresses, one for Transactions (that need to be scored), and another for Transactions that have been confirmed by the customer as having been fraudulent. The egress handles Alert messages for Transactions that have been scored as being possibly fraudulent by the Model.
 
 Incoming Transactions are routed to the TransactionManager, which sends them to both the MerchantFunction (for the relevant Merchant) and to the FraudCount function (for the relevant account). These functions send back feature data that gets packed into a FeatureVector that is then sent to the Model for scoring. The Model responds with a FraudScore that the TransactionManager uses to determine whether or not to create an Alert.
 
@@ -80,36 +57,128 @@ All ConfirmFraud messages are routed to the FraudCount function, which keeps one
 
 The TransactionManager keeps three items of per-transaction state, which are cleared once the transaction has been fully processed.
 
-The MerchantFunction uses an asynchronously connected ProductionMerchantScoreService to provide the score for each Merchant. This mimics the HTTP connection you might have in a real-world application that uses a third-party service to provide enrichment data. The MerchantFunction handles timeouts and retries for the merchant scoring service.
-
-The Model is running as a _Remote Function_ in a separate, stateless container, connected via HTTP.
+The MerchantFunction uses an asynchronously connected MerchantScoreService to provide the score for each Merchant. This mimics the HTTP connection you might have in a real-world application that uses a third-party service to provide enrichment data. The MerchantFunction handles timeouts and retries for the merchant scoring service.
 
 ## Exercises (Python)
 
-The activities in this section can be done without recompiling the Java code or rebuilding the Docker image.
+The activities in this section can be done via the command line.
 
-### Restart the Model
+### Restart the Functions
 
-Since the Model is stateless, and running in its own container, we can redeploy and rescale it independently of the rest of the infrastructure.
+Since the functions are stateless, and running in their own container, we can redeploy and rescale it independently of the rest of the infrastructure.
 
-We can't truly achieve a proper zero-downtime restart of the Python Model without a more elaborate setup, but can do a restart that merely causes the ongoing HTTP requests to be retried.
+We can't truly achieve a proper zero-downtime restart of the functions without a more elaborate setup, but can do a restart that merely causes the ongoing HTTP requests to be retried.
 
 In one terminal window:
 
 ```bash
-$ docker-compose up
+$ docker-compose up -d
 ```
 
-and in another:
+and then restart the python-worker container:
 
 ```bash
-$ docker-compose rm -fsv python_model
-$ docker-compose up python_model
+$ docker-compose restart python-worker
 ```
+
+<details>
+<summary>
+Solution
+</summary>
+
+Stateful Function applications seperate compute from the Apache Flink runtime, so functions can be redeployed without any downtime. 
+
+If you search the TaskManager logs, you will find it logged a `RetryableException`, which means the functions were unavailable but the runtime will attempt to reconnect. When Flink is able to reconnect, the log lines will go away.
+
+```bash
+$ docker-compose logs -f worker
+
+worker_1         | 2020-10-13 19:07:15,327 WARN  org.apache.flink.statefun.flink.core.httpfn.RetryingCallback [] - Retriable exception caught while trying to deliver a message: ToFunctionRequestSummary(address=Address(ververica, counter, 0x007B6AB1), batchSize=1, totalSizeInBytes=108, numberOfStates=1)
+worker_1         | java.net.ConnectException: Failed to connect to python-worker/192.168.16.2:8000
+```
+
+Checking the JobManager logs, you will find the application continues to operate without issue and **does not** restart from checkpoint.
+
+```bash
+
+$ docker-compose logs -f master
+
+master_1         | 2020-10-13 19:07:45,548 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Triggering checkpoint 11 (type=CHECKPOINT) @ 1602616065531 for job fc1fce4f02097b11cfda8caef36bee9c.
+master_1         | 2020-10-13 19:07:46,153 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator    [] - Completed checkpoint 11 for job fc1fce4f02097b11cfda8caef36bee9c (53147 bytes in 605 ms).
+```
+
+</details>
 
 ### Change the Model
 
-Now that you know how to redeploy the model without disrupting the pipeline, go ahead and modify and then redeploy the Model by editing `statefun-workshop-python/main.py`. Make a change that will be readily observable in the logging output, such as never scoring any Transactions for more than 1000 USD as fraudulent.
+Now that you know how to redeploy the model without disrupting the pipeline, go ahead and modify and then redeploy the functions by editing `statefun-functions/main.py`. 
+The function `fraud_count` currently increments the count per `Address` forever. 
+Modify the function to maintain a 30 day rolling window, i.e., everytime the count is incremented there should be a corresponding event in 30 days time that decrements it. You can use the `ExpireFraud` type to implement your solution.
+
+<details>
+<summary>
+Hint 1
+</summary>
+
+A function instance can message any other, including itself.
+
+</details>
+
+<details>
+<summary>
+Hint 2
+</summary>
+
+The function `context` contains a method [pack_and_send_after](https://ci.apache.org/projects/flink/flink-statefun-docs-stable/sdk/python.html#sending-delayed-messages) which will send a message that arrives after some duration.
+
+</details>
+
+<details>
+<summary>
+Solution
+</summary>
+
+Everytime a `ConfirmFraud` message is received, the function should send itself a delayed message to decrement the count after 30 days.
+Delayed messages are non-blocking and durable so they function will continue to process messages during that time and the expiration notice is guarunteed to arrive even if the application has to restart from failure. 
+
+```python
+@functions.bind("ververica/counter")
+def fraud_count(context, message: Union[ConfirmFraud, QueryFraud, ExpireFraud]):
+
+    if isinstance(message, ConfirmFraud):
+        count = context.state("fraud_count").unpack(ReportedFraud)
+        if not count:
+            count = ReportedFraud()
+            count.count = 1
+        else:
+            count.count += 1
+
+        context.state("fraud_count").pack(count)
+        context.pack_and_send_after(
+            timedelta(days=30),
+            context.address.typename(),
+            context.address.identity,
+            ExpireFraud())
+
+    elif isinstance(message, QueryFraud):
+        count = context.state("fraud_count").unpack(ReportedFraud)
+
+        if not count:
+            count = ReportedFraud()
+
+        context.pack_and_reply(count)
+
+    elif isinstance(message, ExpireFraud):
+        count = context.state("fraud_count").unpack(ReportedFraud)
+        count.count -= 1
+        
+        if count.count == 0: 
+            del context["fraud_count"]
+        else:
+            context.state("fraud_count").pack(count)
+```
+
+</details>
 
 ## Exercises (Operations)
 
@@ -188,44 +257,54 @@ If you look closely at the logs you will see the savepoint being mentioned, as i
 master_1        | 2020-08-12 10:24:57,982 INFO  org.apache.flink.runtime.checkpoint.CheckpointCoordinator     - Starting job 53a0baf235b4f1db93157079b60f3719 from savepoint /savepoint-dir/savepoint-3df90d-aa82d691740f ()
 ```
 
+## Exercises (Advanced)
+
+This exercise ties together SDK and operational concepts to make a complex change to the application.
+
+After succesfully deploying a Stateful Functions application to production, a new product requirement comes into the team.
+The final score, returned by the model, is judged to be fraudulent if it is greater than a predefined threshold.
+Different accounts have different levels of tolerance for suspicous activity, and users want to have the option to set 
+their own theshold. 
+
+The operations team has made available a Kafka topic called `thresholds` which contains messages for accounts that wish to
+set custom thresholds. The topic key is the `account` and the value is the following schema.
+
+```protobuf
+message CustomThreshold {
+    int32 threshold = 1;
+    string account = 2;
+}
+```
+
+The typeurl for this message is `com.googleapis/workshop.CustomThreshold`.
+
+The transaction manager should be updated to use the accounts custom threshold if one exists, otherwise it should continue to use the default value. Additionally, the application should be updated **statefully**. This means existing function state such as fraud counts and merchant scores should not be lost, and old transactions should not be reprocessed. 
+
 <details>
 <summary>
-If you want to dig in deeper, click here to learn how.
+Hint 1
 </summary>
 
-## Additional Explorations (Java)
+Just like `fraud_count` and `merchant`, we can create an additional function the `transaction manager` can query to get the accounts
+configured threshold.
 
-To fully explore this application, you will also want to be able to modify and recompile the Java code, and to rebuild the Docker image. For this you will need:
+</details>
 
-* a JDK for Java 8 or Java 11 (a JRE is not sufficient; other versions of Java are not supported)
-* Apache Maven 3.x
-* an IDE for Java development, such as IntelliJ or Visual Studio Code
+<details>
+<summary>
+Hint 2
+</summary>
 
-To do this, first modify `docker-compose.yml` by uncommenting the build lines for **both the master and worker services**, which specify 
+The `transaction manager` needs to have a way to query the current threshold. There is a predefined protobuf type `QueryThreshold`
+you can use for this purpose. Its typeurl is `com.googleapis/workshop.QueryThresdhold`.
 
-```yaml
-build: .
-```
-and then rebuild everything via
+</details>
 
-```bash
-$ mvn install
-$ docker-compose build
-```
+<details>
+<summary>
+Hint 3
+</summary>
 
-### Start with a Small Change
-
-Start by making a small change, to verify that you have the basic tool chain working properly. Suggestions:
-
-* Modify the `THRESHOLD` used by the `TransactionManager`.
-* `FraudCount` maintains a rolling count of the `ConfirmFraud` events for each account for the past 30 days. Try changing that to 7 days.
-
-### Add Another Feature to the FeatureVector
-
-Note: Getting this to work involves modifying `statefun-workshop-protocol/src/main/protobuf/entities.proto` and regenerating the protobuf code (via `./generate-protobuf.sh`), which requires you have `protoc` installed. This will be easier to manage if you use the same version of `protoc` that we've used, namely version 3.7.1. 
-
-A simple feature to add would be the merchant string that is already part of the `PersistedValue<Transaction>` stored by the `TransactionManager`. 
-
-A more ambitious feature would be to send the time elapsed since the most recent `ConfirmFraud` for the same account, since this will involve creating a new `PersistedValue` to store the information.
+While the `thresholds` topic already exists, it is not a configured ingress. It needs to be added to the current module defined via `statefun-runtime/module.yaml`.
 
 </details>

@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright 2020 Ververica GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if ! [ -x "$(command -v protoc)" ]; then
-	echo "protoc must be installed to generate classes" >$2
-	exit 1
-fi
+FROM ververica/flink-statefun:2.2.0
 
-protoc \
-    --proto_path=protobuf/ \
-	--python_out=statefun-functions/ \
-	--python_out=simulator/ \
-	entities.proto
+RUN mkdir -p /opt/statefun/modules/functions
+
+ADD flink-conf.yaml $FLINK_HOME/conf/flink-conf.yaml
+
+COPY module.yaml /opt/statefun/modules/functions/module.yaml
