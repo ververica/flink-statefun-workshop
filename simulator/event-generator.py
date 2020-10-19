@@ -118,7 +118,7 @@ def produce_threshold():
     for threshold in random_confirmed_fraud():
         key = threshold.account.encode('utf-8')
         val = threshold.SerializeToString()
-        producer.send(topic='threshold', key=key, value=val)
+        producer.send(topic='thresholds', key=key, value=val)
         producer.flush()
         time.sleep(delay_seconds)
 
