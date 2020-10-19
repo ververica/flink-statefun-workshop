@@ -308,3 +308,5 @@ Hint 3
 While the `thresholds` topic already exists, it is not a configured ingress. It needs to be added to the current module defined via `statefun-runtime/module.yaml`.
 
 </details>
+
+The full solution is available on the branch [advanced-solution](https://github.com/ververica/flink-statefun-workshop/tree/advanced-solution)
