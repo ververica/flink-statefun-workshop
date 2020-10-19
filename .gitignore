@@ -39,3 +39,5 @@ build-linter
 
 # temporary release files
 release/
+checkpoint-dir/
+savepoint-dir/
