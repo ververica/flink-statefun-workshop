@@ -1,0 +1,67 @@
+# Copyright 2020 Ververica GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: "3.0"
+
+module:
+  meta:
+    type: remote
+  spec:
+    endpoints:
+      - endpoint:
+         meta:
+           kind: http
+         spec:
+           functions: com.ververica.fn/*
+           urlPathTemplate: http://host-machine:8000/statefun
+      - endpoint:
+          meta:
+            kind: http
+          spec:
+            functions: com.ververica.ds/*
+            urlPathTemplate: http://model:8900/statefun
+    ingresses:
+      - ingress:
+          meta:
+            type: io.statefun.kafka/ingress
+            id: com.ververica.ingress/Transaction 
+          spec:
+            address: kafka-broker:9092
+            consumerGroupId: transaction-reader
+            topics:
+              - topic: transactions
+                valueType: com.ververica.types/transaction
+                targets:
+                  - com.ververica.fn/transaction-manager
+      - ingress:
+          meta:
+            type: io.statefun.kafka/ingress
+            id: com.ververica.types/confrim-fraud
+          spec:
+            address: kafka-broker:9092
+            consumerGroupId: confirm-fraud-reader
+            topics:
+              - topic: confirmed
+                valueType: com.ververica.types/confirm-fraud
+                targets:
+                  - com.ververica.fn/counter
+    egresses:
+      - egress:
+          meta:
+            type: io.statefun.kafka/egress
+            id: com.ververica.egress/alerts
+          spec:
+            address: kafka-broker:9092
+            deliverySemantic:
+              type: at-least-once

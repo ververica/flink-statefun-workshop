@@ -16,23 +16,13 @@
 # limitations under the License.
 ################################################################################
 
-# This file contains utility functions for the Stateful Function workshop.
-# You should not need to modify anything in this file to complete the exercises.
-
-import time
+import asyncio
 import random
 
-from entities_pb2 import MerchantScore
 
-
-def internal_query_service():
+async def third_party_api_client(_merchant: str) -> int:
     """
-    This function simulates network IO by sleeping for a random
-    amount of time before returning a random trustworthiness score
+    Simulates querying a 3rd party API for a merchant score.
     """
-
-    time.sleep(random.randint(0, 4))
-
-    m_score = MerchantScore()
-    m_score.score = random.randint(a=0, b=100)
-    return m_score
+    await asyncio.sleep(1)
+    return random.randint(a=0, b=100)
