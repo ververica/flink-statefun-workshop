@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simulator
+  template:
+    metadata:
+      labels:
+        app: simulator
+    spec:
+      containers:
+        - name: simulator 
+          image: ghcr.io/ververica/flink-statefun-workshop/simulator:simulator-1.0.0 
+          imagePullPolicy: IfNotPresent

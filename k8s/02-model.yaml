@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: model 
+spec:
+  type: ClusterIP
+  ports:
+    - name: endpoint
+      port: 8900
+  selector:
+    app: model
+    component: functions 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: model
+      component: functions
+  template:
+    metadata:
+      labels:
+        app: model
+        component: functions
+    spec:
+      containers:
+        - name: model 
+          image: us.gcr.io/da-fe-212612/model:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8900
+              name: endpoint
+          livenessProbe:
+            tcpSocket:
+              port: 8900
+            initialDelaySeconds: 30
+            periodSeconds: 60
