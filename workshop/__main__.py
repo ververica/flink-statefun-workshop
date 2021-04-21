@@ -70,32 +70,7 @@ async def fraud_count(ctx: Context, message: Message):
 
     3) 'query': The message sent by the transaction manager when requesting the curent count.
     """
-    if message.is_type(ConfirmFraud):
-        logger.info(f"Confirming fraud for account {ctx.address.id}")
-        count = ctx.storage.fraud_count or 0
-        ctx.storage.fraud_count = count + 1
-        ctx.send_after(timedelta(minutes=30),
-                       message_builder(
-                           target_typename=ctx.address.typename,
-                           target_id=ctx.address.id,
-                           str_value='expire'))
-
-    elif message.is_string() and message.as_string() == 'query':
-        logger.debug(f"Retrieving fraud count for transaction: {ctx.caller.id}")
-        storage = ctx.storage
-        ctx.send(message_builder(
-            target_typename=ctx.caller.typename,
-            target_id=ctx.caller.id,
-            int_value=storage.fraud_count or 0))
-
-    elif message.is_string() and message.as_string() == 'expire':
-        updated_count = ctx.storage.fraud_count - 1
-        if updated_count == 0:
-            del ctx.storage.fraud_count
-        else:
-            ctx.storage.fraud_count = updated_count
-    else:
-        logger.warning(f"Unknown {message.value_typename()}")
+    raise ValueError('Implement Me')
 
 
 def merchant_scorer(client=third_party_api_client):
@@ -110,18 +85,7 @@ def merchant_scorer(client=third_party_api_client):
     injection of the API client.
     """
     async def call(ctx: Context, message: Message):
-        operation = message.as_string()
-        if operation == 'query':
-            logger.debug(f"Retrieving merchant score for transaction: {ctx.caller.id}")
-            if not ctx.storage.score:
-                logger.debug(f"Score for merchant {ctx.address.id} is not in state, querying external service")
-                score = await client(ctx.address.id)
-                ctx.storage.score = score
-
-            ctx.send(message_builder(
-                target_typename=ctx.caller.typename,
-                target_id=ctx.caller.id,
-                int_value=ctx.storage.score))
+        raise ValueError('Implement Me')
 
     return call
 
@@ -156,75 +120,16 @@ async def transaction_manager(ctx: Context, message: Message):
     """
     if message.is_type(Transaction.TYPE):
         logger.info(f"Processing transaction: {ctx.address.id}")
-        transaction = message.as_type(Transaction.TYPE)
-        ctx.storage.transaction = transaction
-
-        ctx.send(message_builder(
-            target_typename='com.ververica.fn/counter',
-            target_id=transaction.account,
-            str_value='query'))
-
-        ctx.send(message_builder(
-            target_typename='com.ververica.fn/merchant',
-            target_id=transaction.merchant,
-            str_value='query'))
+        raise ValueError('Implement Me')
 
     elif ctx.caller.typename == 'com.ververica.fn/counter':
-        if ctx.storage.merchant_score is None:
-            # The merchant score has not yet been received.
-            # Store the count in state for latter.
-            logger.debug(f"Waiting on merchant score for transaction: {ctx.address.id}")
-            ctx.storage.fraud_count = message.as_int()
-        else:
-            # All features are available. Send the
-            # feature vector to the model.
-            logger.debug(f"Sending feature vector for transaction: {ctx.address.id} to model")
-            ctx.send(message_builder(
-                target_typename=ModelType,
-                target_id=ctx.storage.transaction.account,
-                value=FeatureVector(
-                    message.as_int(),
-                    ctx.storage.merchant_score,
-                    ctx.storage.transaction.amount),
-                value_type=FeatureVector.TYPE))
+        raise ValueError('Implement Me')
 
     elif ctx.caller.typename == 'com.ververica.fn/merchant':
-        if ctx.storage.fraud_count is None:
-            logger.debug(f"Waiting on fraud count for transaction: {ctx.address.id}")
-            # The fraud count has not yet been received.
-            # Store the score in state for latter.
-            ctx.storage.merchant_score = message.as_int()
-        else:
-            # All features are available. Send the
-            # feature vector to the model.
-            logger.debug(f"Sending feature vector for transaction: {ctx.address.id} to model")
-            ctx.send(message_builder(
-                target_typename=ModelType,
-                target_id=ctx.storage.transaction.account,
-                value=FeatureVector(
-                    ctx.storage.fraud_count,
-                    message.as_int(),
-                    ctx.storage.transaction.amount),
-                value_type=FeatureVector.TYPE))
+        raise ValueError('Implement Me')
 
     elif ctx.caller.typename == ModelType:
-        # Check the result of the model
-        # if it is above a threshold then
-        # send the transaction to the alerts
-        # Kafka topic
-        logger.debug(f"Received score {message.as_int()} for transaction {ctx.address.id}")
-        if message.as_int() > THRESHOLD:
-            logger.info(f"Score for transaction {ctx.address.id} is above threshold, sending alert")
-            ctx.send_egress(kafka_egress_message(
-                typename='com.ververica.egress/alerts',
-                topic='alerts',
-                key=ctx.storage.transaction.account,
-                value=ctx.storage.transaction,
-                value_type=Transaction.TYPE))
-
-        del ctx.storage.transaction
-        del ctx.storage.fraud_count
-        del ctx.storage.merchant_score
+        raise ValueError('Implement Me')
 
 
 ####################
