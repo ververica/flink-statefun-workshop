@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: module-config
+data:
+  module.yaml: |+
+    version: "3.0"
+
+    module:
+      meta:
+        type: remote
+      spec:
+        endpoints:
+          - endpoint:
+              meta:
+                kind: http
+              spec:
+                functions: com.ververica.fn/*
+                urlPathTemplate: http://functions/{function.name}
+        ingresses:
+          - ingress:
+              meta:
+                type: io.statefun.kafka/ingress
+                id: com.ververica.ingress/Transaction 
+              spec:
+                address: kafka-broker:9092
+                consumerGroupId: transaction-reader
+                topics:
+                  - topic: transactions
+                    valueType: com.ververica.types/transaction
+                    targets:
+                      - com.ververica.fn/transaction-manager
+          - ingress:
+              meta:
+                type: io.statefun.kafka/ingress
+                id: com.ververica.types/confrim-fraud
+              spec:
+                address: kafka-broker:9092
+                consumerGroupId: confirm-fraud-reader
+                topics:
+                  - topic: confirmed
+                    valueType: com.ververica.types/confirm-fraud
+                    targets:
+                      - com.ververica.fn/counter
+        egresses:
+          - egress:
+              meta:
+                type: io.statefun.kafka/egress
+                id: com.ververica.egress/alerts
+              spec:
+                address: kafka-broker:9092
+                deliverySemantic:
+                  type: at-least-once

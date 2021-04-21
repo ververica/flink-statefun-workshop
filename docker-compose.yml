@@ -1,0 +1,110 @@
+################################################################################
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+version: "2.1"
+
+services:
+
+  ###############################################################
+  #    StateFun runtime
+  ###############################################################
+
+  statefun-manager:
+    image: apache/flink-statefun:3.0.0
+    expose:
+      - "6123"
+    ports:
+      - "8082:8081"
+    environment:
+      ROLE: master
+      MASTER_HOST: statefun-manager
+    volumes:
+      - ./module.yaml:/opt/statefun/modules/workshop/module.yaml
+
+  statefun-worker:
+    image: apache/flink-statefun:3.0.0
+    expose:
+      - "6121"
+      - "6122"
+    environment:
+      ROLE: worker
+      MASTER_HOST: statefun-manager
+    volumes:
+      - ./module.yaml:/opt/statefun/modules/workshop/module.yaml
+
+  ###############################################################
+  #    Model Function supplied by the Data Science Team
+  ###############################################################
+
+  model:
+    image: ghcr.io/ververica/flink-statefun-workshop/random-model:model-1.0.0
+    expose:
+      - "8900"
+
+  ###############################################################
+  #    Kafka for ingress and egress
+  ###############################################################
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka-broker:
+    image: wurstmeister/kafka:2.12-2.0.1
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: "kafka-broker"
+      HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
+      KAFKA_CREATE_TOPICS: "transactions:1:1,alerts:1:1,confirmed:1:1,thresholds:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  ###############################################################
+  # Forward a port 8100 from the host's machine
+  ###############################################################
+
+  # host-machine:
+  #   image: qoomon/docker-host@sha256:e0f021dd77c7c26d37b825ab2cbf73cd0a77ca993417da80a14192cb041937b0
+  #   cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+  #   mem_limit: 8M
+  #   restart: on-failure
+  #   environment:
+  #     PORTS: 8100
+
+  ###############################################################
+  #    Simple Kafka JSON producer to simulate ingress events
+  ###############################################################
+
+  simulator:
+    image: ghcr.io/ververica/flink-statefun-workshop/simulator:simulator-1.0.0 
+    depends_on:
+      - kafka-broker
+
+  ###############################################################
+  #    Statefun Solution
+  ###############################################################
+
+  transaction-manager:
+    image: us.gcr.io/da-fe-212612/transaction-manager:latest 
+    depends_on:
+      - kafka-broker
