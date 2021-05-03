@@ -8,8 +8,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0beta2 (2b71d25, 2019-12-03)"
-   sodipodi:docname="fraud-detector.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="statefun-workshop.svg"
    viewBox="0 0 868.41016 522.15253"
    height="522.15253"
    width="868.41016"
@@ -18,7 +18,7 @@
    version="1.1"><metadata
      id="metadata16"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs14"><clipPath
        id="clipPath28"
        clipPathUnits="userSpaceOnUse"><path
@@ -121,14 +121,14 @@
      inkscape:current-layer="g18"
      inkscape:window-maximized="0"
      inkscape:window-y="0"
-     inkscape:window-x="0"
-     inkscape:cy="240.36728"
-     inkscape:cx="503.5614"
-     inkscape:zoom="0.75122549"
+     inkscape:window-x="1462"
+     inkscape:cy="206.23757"
+     inkscape:cx="446.90613"
+     inkscape:zoom="1.7533486"
      showgrid="false"
      id="namedview12"
-     inkscape:window-height="900"
-     inkscape:window-width="1440"
+     inkscape:window-height="1376"
+     inkscape:window-width="2194"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -160,7 +160,8 @@
          x="287.62537 296.4469 301.25101 309.27463 317.29828 324.51004 332.53369 339.74542 343.75165 346.95999 354.98364"
          y="-263.59802"
          sodipodi:role="line"
-         id="tspan84">Transaction</tspan></text><text
+         id="tspan84">Transaction</tspan></text>
+<text
        y="-246.55556"
        x="296.84802"
        transform="scale(1.0001444,-0.99985561)"
@@ -170,7 +171,8 @@
          x="296.84802 308.8779 316.89035 324.90277 332.91522 340.92767"
          y="-246.55556"
          sodipodi:role="line"
-         id="tspan90">Manage</tspan></text><text
+         id="tspan90">Manage</tspan></text>
+<text
        y="-246.55556"
        x="348.97589"
        transform="scale(1.0001444,-0.99985561)"
@@ -179,7 +181,8 @@
          style="stroke-width:0.239965"
          x="348.97589"
          y="-246.55556"
-         id="tspan96">r</tspan></text><path
+         id="tspan96">r</tspan></text>
+<path
        inkscape:connector-curvature="0"
        id="path100"
        style="fill:#6ea8b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
@@ -197,7 +200,8 @@
          x="286.13867 294.96021 299.76431 307.78796 315.81158 323.83524 327.84146 338.27274 346.29639 354.32004 362.34366"
          y="-423.22107"
          sodipodi:role="line"
-         id="tspan108">Fraud Count</tspan></text><path
+         id="tspan108">Fraud Count</tspan></text>
+<path
        inkscape:connector-curvature="0"
        id="path112"
        style="fill:#6ea8b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
@@ -215,7 +219,8 @@
          x="418.34088 430.37076 438.38318 446.39563 454.40808"
          y="-147.66129"
          sodipodi:role="line"
-         id="tspan120">Model</tspan></text><path
+         id="tspan120">Model</tspan></text>
+<path
        inkscape:connector-curvature="0"
        id="path124"
        style="fill:#6ea8b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
@@ -233,7 +238,8 @@
          x="452.935 464.96484 472.97729 477.78421 484.99875 493.0112 501.02365 509.0361 513.0451"
          y="-398.4975"
          sodipodi:role="line"
-         id="tspan132">Merchant </tspan></text><text
+         id="tspan132">Merchant </tspan></text>
+<text
        y="-381.69507"
        x="464.16257"
        transform="scale(1.0001444,-0.99985561)"
@@ -243,7 +249,8 @@
          x="464.16257 473.78619 481.00214 489.01599 493.82428"
          y="-381.69507"
          sodipodi:role="line"
-         id="tspan138">Score</tspan></text><image
+         id="tspan138">Score</tspan></text>
+<image
        width="1"
        height="1"
        preserveAspectRatio="none"
@@ -254,7 +261,7 @@
        inkscape:connector-curvature="0"
        id="path150"
        style="fill:#3a3838;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 324.9044,364.9717 1.4448,-39.816 -2.4047,-0.0872 -1.4448,39.816 z m -4.7658,-1.3764 3.3453,7.3428 3.8688,-7.0811 z m 8.5716,-37.1504 -3.3453,-7.3428 -3.8687,7.0811 z" /><image
+       d="m 325.56297,364.9717 0.13054,-39.816 -2.40758,-0.0872 -0.13054,39.816 z m -4.81124,-1.3764 3.58768,7.3428 3.63506,-7.0811 z m 7.34534,-37.1504 -3.58768,-7.3428 -3.63496,7.0811 z" /><image
        width="1"
        height="1"
        preserveAspectRatio="none"
@@ -298,7 +305,8 @@
          x="35.831715 46.257408 54.275452 62.293495 66.308113 69.510849 74.323357 86.358818 94.376854 102.39491 106.40952 115.22545 120.03795 128.05598 136.07404"
          y="-423.22107"
          sodipodi:role="line"
-         id="tspan182">Confirmed Fraud</tspan></text><image
+         id="tspan182">Confirmed Fraud</tspan></text>
+<image
        width="1"
        height="1"
        preserveAspectRatio="none"
@@ -322,16 +330,17 @@
        style="fill:none;stroke:#004957;stroke-width:1.60394;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
        id="path202"
        inkscape:connector-curvature="0" /><text
-       y="-254.95677"
-       x="40.348755"
-       transform="scale(1.0001444,-0.99985561)"
-       style="font-variant:normal;font-weight:normal;font-size:13.998px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.239965"
+       y="-255.5618"
+       x="56.377193"
+       transform="scale(1.0001444,-0.99985562)"
+       style="font-variant:normal;font-weight:normal;font-size:13.99800014px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.23996501"
        id="text208"><tspan
-         style="stroke-width:0.239965"
-         x="40.348755 50.774448 58.792488 66.810532 70.82515 74.027885 78.840393 90.875854 98.89389 106.91194 110.92655 119.74249 124.55499 132.57303 140.59106"
-         y="-254.95677"
+         style="stroke-width:0.23996501"
          sodipodi:role="line"
-         id="tspan206">Confirmed Fraud</tspan></text><image
+         id="tspan206"
+         x="56.377193"
+         y="-255.5618">Transactions</tspan></text>
+<image
        width="1"
        height="1"
        preserveAspectRatio="none"
@@ -364,7 +373,8 @@
          x="568.08215 577.70575 580.91833 588.93213 593.74048 597.75085"
          y="-254.95677"
          sodipodi:role="line"
-         id="tspan230">Alerts</tspan></text><image
+         id="tspan230">Alerts</tspan></text>
+<image
        width="1"
        height="1"
        preserveAspectRatio="none"
@@ -374,5 +384,5 @@
        id="image240" /><path
        inkscape:connector-curvature="0"
        id="path242"
-       style="fill:#3a3838;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 382.6491,258.6884 129.5477,10e-5 v 2.4055 H 382.6491 Z m 128.3446,-2.4055 7.2188,3.6084 -7.2188,3.6083 z" /></g></svg>
+       style="fill:#3a3838;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.98889452"
+       d="m 382.6491,258.6884 126.6863,10e-5 v 2.4055 H 382.6491 Z m 125.50978,-2.4055 7.05935,3.6084 -7.05935,3.6083 z" /></g></svg>
