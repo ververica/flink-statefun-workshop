@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gw-nginx-conf
+data:
+  nginx.conf: |
+    events {}
+    http {
+        server {
+            listen 80 default_server;
+            server_name _;
+
+            location /transaction-manager {
+              proxy_pass http://transaction-manager:8100/statefun;
+            }
+
+            location /counter {
+              proxy_pass http://transaction-manager:8100/statefun;
+            }
+
+            location /merchant {
+              keepalive_timeout 0;
+              proxy_pass http://merchant-scorer:8800/statefun;
+            }
+
+            location /model {
+              proxy_pass http://model:8900/statefun;
+            }
+        }
+    }

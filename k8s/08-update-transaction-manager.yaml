@@ -1,16 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: transaction-manager 
-spec:
-  type: ClusterIP
-  ports:
-    - name: endpoint
-      port: 8100
-  selector:
-    app: transaction-manager
-    component: functions 
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +16,7 @@ spec:
     spec:
       containers:
         - name: transaction-manager 
-          image: us.gcr.io/da-fe-212612/transaction-manager:v1 
+          image: us.gcr.io/da-fe-212612/transaction-manager:v2 
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8100
