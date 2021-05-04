@@ -1,41 +1,41 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: transaction-manager 
+  name: merchant-scorer 
 spec:
   type: ClusterIP
   ports:
     - name: endpoint
-      port: 8100
+      port: 8800
   selector:
-    app: transaction-manager
+    app: merchant-scorer
     component: functions 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transaction-manager
+  name: merchant-scorer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: transaction-manager
+      app: merchant-scorer
       component: functions
   template:
     metadata:
       labels:
-        app: transaction-manager
+        app: merchant-scorer
         component: functions
     spec:
       containers:
-        - name: transaction-manager 
-          image: us.gcr.io/da-fe-212612/transaction-manager:v1 
-          imagePullPolicy: IfNotPresent
+        - name: merchant-scorer 
+          image: us.gcr.io/da-fe-212612/merchant-scorer:latest
+          # imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8100
+            - containerPort: 8800
               name: endpoint
           livenessProbe:
             tcpSocket:
-              port: 8100
+              port: 8800
             initialDelaySeconds: 30
             periodSeconds: 60
