@@ -26,7 +26,7 @@ with io.open(os.path.join(this_directory, 'README.md'), 'r', encoding='utf-8') a
 
 setup(
     name='workshop',
-    version='3.0.0',
+    version='3.1.0',
     packages=["workshop"],
     url='https://github.com/ververica/flink-statefun-workshop',
     license='https://www.apache.org/licenses/LICENSE-2.0',
@@ -35,7 +35,7 @@ setup(
     description='Workshop exercises for Apache Flink Stateful Functions',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    install_requires=['apache-flink-statefun==3.0.0',
+    install_requires=['apache-flink-statefun==3.1.0',
                       'aiohttp==3.7.4.post0'],
     tests_require=['pytest'],
     python_requires='>=3.8',
