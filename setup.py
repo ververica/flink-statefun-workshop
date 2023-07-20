@@ -36,7 +36,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=['apache-flink-statefun==3.1.0',
-                      'aiohttp==3.7.4'],
+                      'aiohttp==3.8.5'],
     tests_require=['pytest'],
     python_requires='>=3.8',
     classifiers=[
